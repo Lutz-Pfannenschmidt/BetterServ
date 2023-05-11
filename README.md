@@ -10,4 +10,4 @@ Features:
 - better styling of the webpage (colors and fonts that look better)
 
 Coming soon:
-- custom settings the incorporate user specific colors, images and functionalities
+- custom settings to incorporate user specific colors, images and functionalities

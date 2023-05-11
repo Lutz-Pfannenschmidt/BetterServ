@@ -1,0 +1,73 @@
+.material-symbols-outlined {
+    font-family: 'MaterialSymbolsOutlined', serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 48px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -moz-font-feature-settings: 'liga';
+    -moz-osx-font-smoothing: grayscale;
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 700,
+    'GRAD' 0,
+    'opsz' 48
+} 
+
+body {
+    font-family: 'Ubuntu', sans-serif !important;
+    --topbar-bg-color: #181A18 !important;
+    --sidebar-text-color: white !important;
+    --state-primary-bg: #262626 !important;
+    --state-primary-border: #003866 !important;
+    background: #181A18 !important;
+}
+
+#topbar {
+    background: linear-gradient(126deg, rgba(66,10,103,1) 0%, rgba(126,37,37,1) 50%, rgba(13,18,140,1) 100%);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.panel {
+    border-color: var(--state-primary-border);
+}
+
+#sidebar-wrapper .sidebar-legal-notice {
+	display: none;
+}
+
+#content {
+    background-color: var(--topbar-bg-color);
+}
+
+.panel-title {
+    font-size: 24px;
+}
+
+.panel-title img {
+    display: none;
+}
+
+.custom-symbol {
+    margin-right: 4px;
+    margin-top: 4px;
+    font-size: inherit;
+}

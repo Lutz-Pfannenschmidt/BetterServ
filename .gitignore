@@ -1,0 +1,4 @@
+*.sh
+
+.idea/
+web-ext-artifacts/

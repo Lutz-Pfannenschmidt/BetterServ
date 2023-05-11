@@ -1,0 +1,37 @@
+{
+    "manifest_version": 2,
+    "name": "BetterIServ",
+    "version": "0.1.7",
+  
+    "description": "yes",
+  
+    "content_scripts": [
+      {
+        "matches": ["*://*/*"],
+        "js": ["index.js"]
+      }
+    ],
+
+    "permissions": [
+      "activeTab",
+      "storage"
+    ],
+
+    "browser_action": {
+      "default_title": "BetterServ",
+      "default_popup": "gui/index.html"
+    },
+
+    "icons": {
+        "192": "icons/android-chrome-192x192.png",
+        "512": "icons/android-chrome-512x512.png"
+    },
+
+    "browser_specific_settings": {
+      "gecko": {
+        "id": "pfannenschmidtlutz@gmail.com"
+      }
+    }
+  
+  }
+  

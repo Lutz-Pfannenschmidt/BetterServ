@@ -31,6 +31,24 @@ a {
 	}
 }
 
+#topbar {
+	background: linear-gradient(126deg, rgba(66,10,103,1) 0%, rgba(126,37,37,1) 50%, rgba(13,18,140,1) 100%);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0 50%;
+	}
+}
+
 .panel {
 	border: none;
 	background: var(--betterserv-content-bg) !important;
@@ -41,12 +59,33 @@ a {
 
 	.panel-title {
 		font-size: 24px;
+
+		a {
+			color: var(--state-primary-border);
+			font-size: 16px;
+		}
+
+		img {
+			display: none;
+		}
+	}
+
+	.panel-subtitle {
+		color: var(--betterserv-text);
+		margin: 0;
 	}
 
 	.panel-heading {
 		background: inherit !important;
 		border-bottom: 1px solid var(--state-primary-border);
 		padding: 16px;
+	}
+
+	.panel-body {
+		h2 {
+			margin-top: 0;
+			border-bottom: 1px solid var(--border-color);
+		}
 	}
 }
 
@@ -111,4 +150,12 @@ a {
 			border-radius: 50%;
 		}
 	}
+}
+
+#sidebar-wrapper .sidebar-legal-notice {
+	display: none !important;
+}
+
+.material-symbols-outlined {
+	font-family: 'MaterialSymbolsOutlined', serif !important;
 }

@@ -39,7 +39,7 @@ async function main() {
     betterServPanel.classList.add("panel-default")
     betterServPanel.innerHTML = `
         <div class="panel-heading">
-            <h2 class="panel-title betterserv-title">[BetterServ] <a href="https://github.com/Lutz-Pfannenschmidt/BetterServ">GitHub</a></h2>
+            <h2 class="panel-title">[BetterServ] <a href="https://github.com/Lutz-Pfannenschmidt/BetterServ">GitHub</a></h2>
         </div>
         <div class="panel-body">
             <h2>Settings</h2>

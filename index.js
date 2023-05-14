@@ -7,7 +7,7 @@ iservBaseUri.then((value) => {
 
 
 function main(url) {
-    let css = ["css/symbols.css", "css/ubuntu.css", "css/style.css"]
+    let css = ["css/symbols.css", "css/ubuntu.css", "css/style.css", "css/betterserv.css"]
     let js = ["js/inject.js"]
 
     for (const j of js) {

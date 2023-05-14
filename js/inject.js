@@ -15,7 +15,6 @@ class BetterServ {
     }
 }
 
-
 const BETTERSERV_URL = document.getElementById("BetterServUrl").textContent
 
 let BASE_URL = document.getElementById("IServUrl").textContent
@@ -30,8 +29,51 @@ const DEFAULT_FILES = []
 main()
 
 async function main() {
-    console.clear()
     console.log("%cBetterIserv loaded", "font-size: 30px")
+
+
+    let sidebar = document.getElementById("idesk-sidebar")
+    let betterServPanel = document.createElement("div")
+    betterServPanel.classList.add("panel")
+    betterServPanel.classList.add("panel-dashboard")
+    betterServPanel.classList.add("panel-default")
+    betterServPanel.innerHTML = `
+        <div class="panel-heading">
+            <h2 class="panel-title betterserv-title">[BetterServ] <a href="https://github.com/Lutz-Pfannenschmidt/BetterServ">GitHub</a></h2>
+        </div>
+        <div class="panel-body">
+            <h2>Settings</h2>
+            <div>
+                <label class="betterserv-switch">
+                    <input type="checkbox" checked id="myCheckbox">
+                    <span class="betterserv-slider betterserv-round"></span>
+                </label>
+                Change Document Title
+            </div>
+            <div>
+                <select id="betterserv-banner-selection">
+                    <option value="gradient">Linear Gradient (Default)</option>
+                    <option value="image">Custom Image</option>
+                    <option value="color">A Single Color</option>
+                </select>
+                <label for="betterserv-banner-selection">Type of banner</label>
+            </div>
+
+        </div>`
+
+    sidebar.prepend(betterServPanel)
+
+    const checkbox = document.getElementById('myCheckbox')
+
+    checkbox.addEventListener('change', (event) => {
+        if (event.currentTarget.checked) {
+            alert('checked');
+        } else {
+            alert('not checked');
+        }
+    })
+
+
 
     let exists = 0
     let messages = []

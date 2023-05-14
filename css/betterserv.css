@@ -1,0 +1,100 @@
+:root {
+  --betterserv-bg: #191919;
+  --betterserv-content-bg: #1c1c1c;
+  --betterserv-text: #ffffff;
+  --betterserv-link: #2d77b2;
+  --betterserv-btn: #396B62;
+  --betterserv-secondary-btn: #54484A;
+  --betterserv-accent: #D4692C;
+}
+
+body {
+  font-family: "Ubuntu", sans-serif !important;
+  --topbar-bg-color: var(--betterserv-btn) !important;
+  --sidebar-text-color: var(--betterserv-text) !important;
+  --state-primary-bg: var(--betterserv-bg) !important;
+  --state-primary-border: var(--betterserv-btn) !important;
+  --border-color: transparent !important;
+  background: var(--betterserv-bg) !important;
+  --link-color: var(--betterserv-link) !important;
+}
+
+a {
+  color: var(--betterserv-text) !important;
+}
+
+#content {
+  background: var(--betterserv-bg) !important;
+}
+#content a {
+  color: var(--betterserv-link) !important;
+}
+
+.panel {
+  border: none;
+  background: var(--betterserv-content-bg) !important;
+}
+.panel hr {
+  border-color: var(--state-primary-border);
+}
+.panel .panel-title {
+  font-size: 24px;
+}
+.panel .panel-heading {
+  background: inherit !important;
+  border-bottom: 1px solid var(--state-primary-border);
+  padding: 16px;
+}
+
+.betterserv-switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 17px;
+}
+.betterserv-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.betterserv-switch input:checked + .betterserv-slider {
+  background-color: var(--betterserv-btn);
+}
+.betterserv-switch input:focus + .betterserv-slider {
+  box-shadow: 0 0 1px var(--betterserv-btn);
+}
+.betterserv-switch input:checked + .betterserv-slider:before {
+  -webkit-transform: translateX(13px);
+  -ms-transform: translateX(13px);
+  transform: translateX(13px);
+}
+.betterserv-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--betterserv-secondary-btn);
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+.betterserv-slider::before {
+  position: absolute;
+  content: "";
+  height: 9px;
+  width: 9px;
+  left: 4px;
+  bottom: 4px;
+  background-color: var(--betterserv-text);
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+.betterserv-round {
+  border-radius: 17px;
+}
+.betterserv-round::before {
+  border-radius: 50%;
+}
+
+/*# sourceMappingURL=betterserv.css.map */

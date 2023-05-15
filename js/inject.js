@@ -33,45 +33,7 @@ async function main() {
 
 
     let sidebar = document.getElementById("idesk-sidebar")
-    let betterServPanel = document.createElement("div")
-    betterServPanel.classList.add("panel")
-    betterServPanel.classList.add("panel-dashboard")
-    betterServPanel.classList.add("panel-default")
-    betterServPanel.innerHTML = `
-        <div class="panel-heading">
-            <h2 class="panel-title">[BetterServ] <a href="https://github.com/Lutz-Pfannenschmidt/BetterServ">GitHub</a></h2>
-        </div>
-        <div class="panel-body">
-            <h2>Settings</h2>
-            <div>
-                <label class="betterserv-switch">
-                    <input type="checkbox" checked id="myCheckbox">
-                    <span class="betterserv-slider betterserv-round"></span>
-                </label>
-                Change Document Title
-            </div>
-            <div>
-                <select id="betterserv-banner-selection">
-                    <option value="gradient">Linear Gradient (Default)</option>
-                    <option value="image">Custom Image</option>
-                    <option value="color">A Single Color</option>
-                </select>
-                <label for="betterserv-banner-selection">Type of banner</label>
-            </div>
-
-        </div>`
-
-    sidebar.prepend(betterServPanel)
-
-    const checkbox = document.getElementById('myCheckbox')
-
-    checkbox.addEventListener('change', (event) => {
-        if (event.currentTarget.checked) {
-            alert('checked');
-        } else {
-            alert('not checked');
-        }
-    })
+    if (sidebar) buildSidebar(sidebar)
 
 
 
@@ -94,6 +56,50 @@ async function main() {
     } else {
         BetterServ.log(`${DEFAULT_FILES.length + 1}/${DEFAULT_FILES.length + 1} Default files exist. Skipping creation`, messages)
     }
+}
+
+function buildSidebar(sidebar) {
+    let betterServPanel = document.createElement("div")
+    betterServPanel.classList.add("panel")
+    betterServPanel.classList.add("panel-dashboard")
+    betterServPanel.classList.add("panel-default")
+    betterServPanel.innerHTML = `
+        <div class="panel-heading">
+            <h2 class="panel-title">[BetterServ] <a href="https://github.com/Lutz-Pfannenschmidt/BetterServ">GitHub</a></h2>
+        </div>
+        <div class="panel-body">
+            <h2>Settings</h2>
+            <div>
+                <label class="betterserv-switch">
+                    <input type="checkbox" checked id="myCheckbox">
+                    <span class="betterserv-slider betterserv-round"></span>
+                </label>
+                Setting 1
+            </div>
+            <div>
+                <select id="betterserv-banner-selection">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="333">333</option>
+                </select>
+                <label for="betterserv-banner-selection">Setting 2</label>
+            </div>
+
+        </div>`
+
+    sidebar.prepend(betterServPanel)
+
+    const checkbox = document.getElementById('myCheckbox')
+
+    checkbox.addEventListener('change', (event) => {
+        alert(event.currentTarget.checked);
+    })
+
+    const selection = document.getElementById('betterserv-banner-selection')
+
+    selection.addEventListener('change', (event) => {
+        alert(event.target.value);
+    })
 }
 
 async function createDefaultFiles() {

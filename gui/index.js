@@ -21,6 +21,7 @@ async function buildTable() {
         folderLink.textContent = folder[1]
         removeLink.href = "#"
         removeLink.textContent = "heart_minus"
+        removeLink.style.color = "var(--betterserv-accent)"
         removeLink.classList.add("icons")
 
         removeLink.addEventListener("click", async (e) => {

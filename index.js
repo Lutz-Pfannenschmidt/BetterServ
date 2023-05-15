@@ -40,7 +40,7 @@ function main(url) {
 }
 
 async function pinFileTable() {
-    await delay(500)
+    await delay(300)
 
     let links = document.getElementsByTagName('a')
 
@@ -55,7 +55,13 @@ async function pinFileTable() {
     let table = document.getElementById("files")
     let tbody = table.querySelector("tbody")
     let entries = tbody.children
-    let list = await getStorage("betterServLikedFolders") || []
+    let list = await getStorage("betterServLikedFolders")
+    if (typeof list === "undefined") {
+        await browser.storage.sync.set({
+            "betterServLikedFolders": []
+        })
+        list = []
+    }
 
     console.log(entries)
 

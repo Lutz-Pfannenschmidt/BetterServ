@@ -34,9 +34,15 @@ button {
 table {
   border-collapse: collapse;
 }
+table tr {
+  border-bottom: 1px solid var(--betterserv-btn);
+}
 table td {
-  border: 1px solid var(--betterserv-btn);
-  padding: 4px;
+  padding: 6px;
+}
+table td a {
+  color: var(--betterserv-text);
+  text-decoration: none;
 }
 
 .material-symbols-outlined, .icons {

@@ -33,9 +33,18 @@ button {
 
 table {
 	border-collapse: collapse;
+
+	tr {
+		border-bottom: 1px solid var(--betterserv-btn);
+	}
+
 	td {
-		border: 1px solid var(--betterserv-btn);
-		padding: 4px;
+		padding: 6px;
+
+		a {
+			color: var(--betterserv-text);
+			text-decoration: none;
+		}
 	}
 }
 

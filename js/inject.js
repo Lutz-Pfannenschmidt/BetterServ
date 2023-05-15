@@ -87,7 +87,7 @@ function buildSidebar(sidebar) {
 
         </div>`
 
-    sidebar.prepend(betterServPanel)
+    // sidebar.prepend(betterServPanel)
 
     const checkbox = document.getElementById('myCheckbox')
 

@@ -132,6 +132,14 @@ a {
 .betterserv-round::before {
   border-radius: 50%;
 }
+.betterserv-likeFolder, .betterserv-checkboxFolder {
+  font-size: 24px;
+  text-decoration: none !important;
+  padding-left: 5px;
+}
+.betterserv-likeFolder span, .betterserv-checkboxFolder span {
+  color: var(--betterserv-text);
+}
 
 #sidebar-wrapper .sidebar-legal-notice {
   display: none !important;

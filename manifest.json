@@ -3,7 +3,7 @@
     "name": "BetterIServ",
     "version": "0.1.7",
   
-    "description": "yes",
+    "description": "enhances IServ",
   
     "content_scripts": [
       {

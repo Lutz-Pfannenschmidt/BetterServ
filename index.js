@@ -47,7 +47,7 @@ async function pinFileTable() {
     for (let i = 0; i < links.length; i++) {
         links[i].addEventListener('click', async function(e) {
             if (e.target.id.includes("betterserv")) return
-            await delay(10)
+            await delay(100)
             window.location.reload()
         })
     }

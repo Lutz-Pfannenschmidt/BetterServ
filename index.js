@@ -42,7 +42,7 @@ function main(url) {
 async function pinFileTable() {
     await delay(300)
 
-    let links = document.querySelector("#content #files a, #content a.files-link")
+    let links = document.querySelectorAll("#content #files a, #content a.files-link")
 
     for (let i = 0; i < links.length; i++) {
         links[i].addEventListener('click', async function(e) {

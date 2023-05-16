@@ -48,7 +48,11 @@ async function pinFileTable() {
         links[i].addEventListener('click', async function(e) {
             if (e.target.id.includes("betterserv")) return
             await delay(100)
-            window.location.reload()
+            let custom = document.getElementById("content").querySelectorAll(".betterserv-files")
+            for (let j = 0; j < custom.length; j++) {
+                custom[j].outerHTML = ""
+            }
+            pinFileTable()
         })
     }
 
@@ -73,7 +77,7 @@ async function pinFileTable() {
         let likeIcon = document.createElement("span")
         likeFolderLink.href = "#"
         likeFolderLink.appendChild(likeIcon)
-        likeFolderLink.classList.add("betterserv-likeFolder")
+        likeFolderLink.classList.add("betterserv-likeFolder", "betterserv-files")
         likeIcon.classList.add("material-symbols-outlined")
         likeIcon.textContent = "favorite"
 
@@ -84,7 +88,7 @@ async function pinFileTable() {
         let checkboxIcon = document.createElement("span")
         checkboxLink.href = "#"
         checkboxLink.appendChild(checkboxIcon)
-        checkboxLink.classList.add("betterserv-checkboxFolder")
+        checkboxLink.classList.add("betterserv-checkboxFolder", "betterserv-files")
         checkboxIcon.classList.add("material-symbols-outlined")
         checkboxIcon.textContent = "check_box_outline_blank"
 

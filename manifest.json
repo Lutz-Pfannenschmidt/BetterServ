@@ -28,17 +28,9 @@
             "run_at": "document_start"
         }
     ],
-    "background": {
-        "scripts": [
-            "js/background.js"
-        ]
-    },
     "permissions": [
         "activeTab",
-        "storage",
-        "webRequest",
-        "webRequestBlocking",
-        "<all_urls>"
+        "storage"
     ],
     "browser_action": {
         "default_title": "BetterServ",

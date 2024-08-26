@@ -1,6 +1,6 @@
 {
-	"banner": "gradient",
-	"gradient": "linear-gradient(126deg, rgba(66,10,103,1) 0%, rgba(126,37,37,1) 50%, rgba(13,18,140,1) 100%)",
-	"color": "#181A18",
-	"image": "/file/-/.betterserv/banner.png"
+    "banner": "gradient",
+    "gradient": "linear-gradient(126deg, rgba(66,10,103,1) 0%, rgba(126,37,37,1) 50%, rgba(13,18,140,1) 100%)",
+    "color": "#181A18",
+    "image": "/file/-/.betterserv/banner.png"
 }

@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "run": "web-ext run --firefox /usr/bin/firefox -p /home/lutz/.mozilla/firefox/DEV/ --keep-profile-changes --verbose --url https://neponet.de/iserv",
+        "build": "web-ext build --verbose"
+    }
+}

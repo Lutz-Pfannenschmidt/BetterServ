@@ -30,13 +30,14 @@ a {
 
 #content {
 	background: var(--betterserv-bg) !important;
+
 	a {
 		color: var(--betterserv-link) !important;
 	}
 }
 
 #topbar {
-	background: linear-gradient(126deg, rgba(66,10,103,1) 0%, rgba(126,37,37,1) 50%, rgba(13,18,140,1) 100%);
+	background: linear-gradient(126deg, rgba(66, 10, 103, 1) 0%, rgba(126, 37, 37, 1) 50%, rgba(13, 18, 140, 1) 100%);
 	background-size: 400% 400%;
 	animation: gradient 15s ease infinite;
 }
@@ -45,9 +46,11 @@ a {
 	0% {
 		background-position: 0 50%;
 	}
+
 	50% {
 		background-position: 100% 50%;
 	}
+
 	100% {
 		background-position: 0 50%;
 	}
@@ -107,15 +110,15 @@ a {
 			width: 0;
 			height: 0;
 
-			&:checked + .betterserv-slider {
+			&:checked+.betterserv-slider {
 				background-color: var(--betterserv-btn);
 			}
 
-			&:focus + .betterserv-slider {
+			&:focus+.betterserv-slider {
 				box-shadow: 0 0 1px var(--betterserv-btn);
 			}
 
-			&:checked + .betterserv-slider:before {
+			&:checked+.betterserv-slider:before {
 				-webkit-transform: translateX(13px);
 				-ms-transform: translateX(13px);
 				transform: translateX(13px);
@@ -155,7 +158,8 @@ a {
 		}
 	}
 
-	&-likeFolder, &-checkboxFolder {
+	&-likeFolder,
+	&-checkboxFolder {
 		font-size: 24px;
 		text-decoration: none !important;
 		padding-left: 5px;

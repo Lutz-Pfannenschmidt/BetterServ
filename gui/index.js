@@ -1,15 +1,9 @@
-getStorage("iservBaseUri").then((value) => {
-	if (!value) {
-		window.location.pathname = "/gui/settings.html";
-	}
-});
-
 buildTable();
 
 async function buildTable() {
-	const list = document.getElementById("betterServLikedFolders");
+	const list = document.getElementById("betterserv-liked");
 	list.innerHTML = "";
-	const folders = (await getStorage("betterServLikedFolders")) || [];
+	const folders = (await getStorage("betterserv-liked")) || [];
 
 	folders.forEach(async (folder, i) => {
 		const tr = document.createElement("tr");
@@ -28,12 +22,12 @@ async function buildTable() {
 			"click",
 			async (e) => {
 				e.preventDefault();
-				const folders = await getStorage("betterServLikedFolders");
+				const folders = await getStorage("betterserv-liked");
 
 				folders.splice(i, 1);
 
 				await browser.storage.sync.set({
-					betterServLikedFolders: folders,
+					"betterserv-liked": folders,
 				});
 
 				buildTable();

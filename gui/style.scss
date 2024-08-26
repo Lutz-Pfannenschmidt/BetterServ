@@ -3,9 +3,9 @@
     --betterserv-content-bg: #1c1c1c;
     --betterserv-text: #ffffff;
     --betterserv-link: #2d77b2;
-    --betterserv-btn: #396B62;
-    --betterserv-secondary-btn: #54484A; // not sure yet
-    --betterserv-accent: #D4692C;
+    --betterserv-btn: #396b62;
+    --betterserv-secondary-btn: #54484a; // not sure yet
+    --betterserv-accent: #d4692c;
 }
 
 body {
@@ -51,7 +51,7 @@ table {
 
 .material-symbols-outlined,
 .icons {
-    font-family: 'MaterialSymbolsOutlined', serif !important;
+    font-family: "MaterialSymbolsOutlined", serif !important;
     color: var(--betterserv-text);
     text-decoration: none;
     cursor: pointer;

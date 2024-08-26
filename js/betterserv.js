@@ -1,6 +1,10 @@
-function log(string, list = []) {
+function betterLog(string, list = [], module = "") {
+	let name = "BetterServ";
+	if (module) {
+		name = `BetterServ ${module}`;
+	}
 	if (list.length > 0) {
-		console.group("%c[BetterServ]", "color: green", string);
+		console.group(`%c[${name}]`, "color: green", string);
 		list.forEach((item, index) => {
 			console.log(`%c[${index + 1}/${list.length}]`, "color: green", item);
 		});
@@ -10,30 +14,35 @@ function log(string, list = []) {
 	}
 }
 
-function error(string) {
-	console.log("%c[BetterServ]", "color: green", string);
+function betterError(string, module = "") {
+	let name = "BetterServ";
+	if (module) {
+		name = `BetterServ ${module}`;
+	}
+	console.log(`%c[${name}]`, "color: red", string);
 }
 
 const BETTERSERV_URL = browser.runtime.getURL("");
-
-let BASE_URL = window.location.hostname;
-BASE_URL = BASE_URL.endsWith("/") ? BASE_URL.slice(0, -1) : BASE_URL;
-
+const BASE_URL = `${window.location.toString().split("/iserv")[0]}/iserv`;
 const ADD_FOLDER_URL = `${BASE_URL}/file/add/folder`;
 const UPLOAD_FILE_URL = `${BASE_URL}/file/upload`;
 const BASE_FOLDER_URL = `${BASE_URL}/file/-`;
 const DEFAULT_FILES = [];
-// const DEFAULT_FILES = ["settings.json", "banner.png", "README.md"]
+// const DEFAULT_FILES = ["settings.json", "banner.png", "README.md"];
 
-if (window.location.toString().includes("/iserv/")) {
-	main();
-}
+main();
 
 async function main() {
 	console.log("%cBetterIserv loaded", "font-size: 30px");
 
-	const sidebar = document.getElementById("idesk-sidebar");
-	if (sidebar) buildSidebar(sidebar);
+	document.addEventListener("DOMContentLoaded", () => {
+		const sidebar = document.getElementById("idesk-sidebar");
+		if (sidebar) {
+			buildSidebar(sidebar);
+		} else {
+			betterLog("Sidebar not found");
+		}
+	});
 
 	let exists = 0;
 	const messages = [];
@@ -53,13 +62,13 @@ async function main() {
 	}
 
 	if (exists < DEFAULT_FILES.length + 1) {
-		log(
+		betterLog(
 			`${exists}/${DEFAULT_FILES.length + 1} default files are present. Creating remaining ${DEFAULT_FILES.length + 1 - exists}`,
 			messages,
 		);
 		await createDefaultFiles();
 	} else {
-		log(
+		betterLog(
 			`${DEFAULT_FILES.length + 1}/${DEFAULT_FILES.length + 1} Default files exist. Skipping creation`,
 			messages,
 		);
@@ -67,13 +76,14 @@ async function main() {
 }
 
 function buildSidebar(sidebar) {
+	betterLog("Building sidebar");
 	const betterServPanel = document.createElement("div");
 	betterServPanel.classList.add("panel");
 	betterServPanel.classList.add("panel-dashboard");
 	betterServPanel.classList.add("panel-default");
 	betterServPanel.innerHTML = `
         <div class="panel-heading">
-            <h2 class="panel-title">[BetterServ] <a href="https://github.com/Lutz-Pfannenschmidt/BetterServ">GitHub</a></h2>
+            <h2 class="panel-title">[BetterServ] <a target="_blank" href="https://github.com/Lutz-Pfannenschmidt/BetterServ">GitHub</a></h2>
         </div>
         <div class="panel-body">
             <h2>Settings</h2>
@@ -168,12 +178,12 @@ function uploadFile(filename, path, fileContent, uploadToken) {
 	})
 		.then((response) => {
 			if (!response.ok) {
-				error("File upload failed");
+				betterError("File upload failed");
 			}
 			return response.text();
 		})
 		.then((data) => {
-			log("File uploaded successfully:", [data]);
+			betterLog("File uploaded successfully:", [data]);
 		})
 		.catch((error) => {
 			error("File upload failed", [error.toString()]);

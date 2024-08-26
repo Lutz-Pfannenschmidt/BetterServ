@@ -6,21 +6,39 @@
     "content_scripts": [
         {
             "matches": [
-                "*://*/*"
+                "*://*/iserv*"
             ],
             "js": [
-                "js/style.js"
+                "js/betterserv.js"
             ],
             "css": [
                 "css/symbols.css",
                 "css/ubuntu.css",
                 "css/betterserv.css"
-            ]
+            ],
+            "run_at": "document_start"
+        },
+        {
+            "matches": [
+                "*://*/iserv/file*"
+            ],
+            "js": [
+                "js/betterfiles.js"
+            ],
+            "run_at": "document_start"
         }
     ],
+    "background": {
+        "scripts": [
+            "js/background.js"
+        ]
+    },
     "permissions": [
         "activeTab",
-        "storage"
+        "storage",
+        "webRequest",
+        "webRequestBlocking",
+        "<all_urls>"
     ],
     "browser_action": {
         "default_title": "BetterServ",

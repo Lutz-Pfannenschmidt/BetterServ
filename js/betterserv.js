@@ -98,6 +98,7 @@ async function buildSidebar(sidebar) {
 	const liked = document.getElementById("betterserv-liked");
 	if (liked) {
 		for (const likedItem of likedItems) {
+			if (!likedItem[0].inludes(window.location.host)) continue;
 			const div = document.createElement("div");
 
 			const like_checkbox = document.createElement("a");

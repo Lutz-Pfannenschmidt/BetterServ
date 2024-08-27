@@ -10,7 +10,8 @@
             ],
             "js": [
                 "js/betterserv.js",
-                "js/iservlist.js"
+                "js/iservlist.js",
+                "js/hidelogin.js"
             ],
             "css": [
                 "css/symbols.css",

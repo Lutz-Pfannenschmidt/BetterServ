@@ -75,8 +75,10 @@ async function main() {
 	}
 }
 
-function buildSidebar(sidebar) {
+async function buildSidebar(sidebar) {
 	betterLog("Building sidebar");
+	let likedItems = await getStorage("betterserv-liked");
+
 	const betterServPanel = document.createElement("div");
 	betterServPanel.classList.add("panel");
 	betterServPanel.classList.add("panel-dashboard");
@@ -86,38 +88,45 @@ function buildSidebar(sidebar) {
             <h2 class="panel-title">[BetterServ] <a target="_blank" href="https://github.com/Lutz-Pfannenschmidt/BetterServ">GitHub</a></h2>
         </div>
         <div class="panel-body">
-            <h2>Settings</h2>
-            <div>
-                <label class="betterserv-switch">
-                    <input type="checkbox" checked id="myCheckbox">
-                    <span class="betterserv-slider betterserv-round"></span>
-                </label>
-                Setting 1
-            </div>
-            <div>
-                <select id="betterserv-banner-selection">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="333">333</option>
-                </select>
-                <label for="betterserv-banner-selection">Setting 2</label>
-            </div>
+
+            ${likedItems.length > 0 ? '<h2>Liked Files</h2> <div id="betterserv-liked"></div>' : ""}
 
         </div>`;
 
 	sidebar.prepend(betterServPanel);
 
-	const checkbox = document.getElementById("myCheckbox");
+	const liked = document.getElementById("betterserv-liked");
+	if (liked) {
+		for (const likedItem of likedItems) {
+			const div = document.createElement("div");
 
-	checkbox.addEventListener("change", (event) => {
-		alert(event.currentTarget.checked);
-	});
+			const like_checkbox = document.createElement("a");
+			like_checkbox.classList.add("betterserv-checkbox", "like");
+			like_checkbox.href = "#";
+			like_checkbox.classList.add("checked");
+			like_checkbox.addEventListener("click", async (e) => {
+				e.preventDefault();
+				like_checkbox.classList.toggle("checked");
 
-	const selection = document.getElementById("betterserv-banner-selection");
+				likedItems = likedItems.filter(
+					(item) => item[0] !== likedItem[0] && item[1] !== likedItem[1],
+				);
 
-	selection.addEventListener("change", (event) => {
-		alert(event.target.value);
-	});
+				await browser.storage.sync.set({
+					"betterserv-liked": likedItems,
+				});
+				div.outerHTML = "";
+			});
+			div.appendChild(like_checkbox);
+
+			const name = document.createElement("a");
+			name.textContent = likedItem[1];
+			name.href = likedItem[0];
+			div.appendChild(name);
+
+			liked.appendChild(div);
+		}
+	}
 }
 
 async function createDefaultFiles() {
@@ -188,6 +197,10 @@ function uploadFile(filename, path, fileContent, uploadToken) {
 		.catch((error) => {
 			error("File upload failed", [error.toString()]);
 		});
+}
+
+function getStorage(key) {
+	return browser.storage.sync.get(key).then((res) => res[key]);
 }
 
 /**

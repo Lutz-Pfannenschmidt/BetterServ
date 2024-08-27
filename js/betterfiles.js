@@ -3,20 +3,22 @@ document.addEventListener("DOMContentLoaded", main);
 let selectAll = true;
 
 async function main() {
-	const tbody = document.querySelector("#files");
-	if (!tbody) {
+	const table = document.querySelector("#files");
+	if (!table) {
 		betterError("File table not found", "Files");
 		return;
 	}
+
+	setInterval(() => {
+		prettierFiles();
+	}, 500);
+
 	const observer = new MutationObserver((mutations) => {
 		for (const mutation of mutations) {
-			if (mutation.type !== "childList") {
-				continue;
-			}
 			prettierFiles();
 		}
 	});
-	observer.observe(tbody, { childList: true });
+	observer.observe(table, { childList: true });
 	betterLog("Observer started", undefined, "Files");
 }
 
@@ -53,12 +55,19 @@ async function prettierFiles() {
 
 	if (typeof liked !== "object") return;
 
+	const old_checkboxes = document.querySelectorAll(
+		"#files tbody .betterserv-checkbox",
+	);
+	for (const checkbox of old_checkboxes) {
+		checkbox.outerHTML = "";
+	}
+
 	for (const row of rows) {
-		if (row.classList.contains("betterserv-modified")) return;
 		if (row.nodeName.toLowerCase() !== "tr") return;
 		row.classList.add("betterserv-modified");
 
 		const td = row.querySelector("td.files-id");
+		if (!td) return;
 		td.style.display = "flex";
 		const checkbox = td.querySelector("input[type=checkbox]");
 		checkbox.style.display = "none";

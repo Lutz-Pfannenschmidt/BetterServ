@@ -9,7 +9,8 @@
                 "*://*/iserv*"
             ],
             "js": [
-                "js/betterserv.js"
+                "js/betterserv.js",
+                "js/iservlist.js"
             ],
             "css": [
                 "css/symbols.css",

@@ -1,5 +1,9 @@
 # BetterServ Changelog
 
+## V 0.1.12
+
+- dont wanna talk about it
+
 ## V 0.1.11
 
 - now liked files and folders are only shown on the corresponding IServ.

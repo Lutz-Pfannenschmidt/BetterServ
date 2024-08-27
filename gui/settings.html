@@ -12,7 +12,24 @@
 <body data-color-scheme="dark">
     <h1>Settings for <i><span class="domain"></span></i></h1>
 
-    <form method="get" id="account" style="display: none;">
+    <form id="general">
+        <fieldset>
+            <legend>General</legend>
+            <div>
+                <label>
+                    <input type="checkbox" name="hide-login">
+                    Hide the last login time on the homepage
+                </label>
+                <label>
+                    <input type="checkbox" name="custom-files">
+                    Custom file browser (WIP)
+                </label>
+            </div>
+        </fieldset>
+        <button type="submit">Save</button>
+    </form>
+
+    <form id="account" style="display: none;">
         <fieldset>
             <legend>Account (Needed for advanced files and email)</legend>
             <label>

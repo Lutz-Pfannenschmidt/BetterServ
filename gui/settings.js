@@ -1,4 +1,5 @@
-const accountForm = document.querySelector("form");
+const accountForm = document.getElementById("account");
+const generalForm = document.getElementById("general");
 
 main();
 
@@ -13,13 +14,37 @@ async function main() {
 		domainSpan.textContent = domain;
 	}
 
+	// General Settings
+	const hide_login = generalForm.querySelector("input[name='hide-login']");
+	const custom_files = generalForm.querySelector("input[name='custom-files']");
+
+	const generalSettings = await getGeneralSettings(domain);
+	hide_login.checked = generalSettings["hide-login"] || false;
+	custom_files.checked = generalSettings["custom-files"] || false;
+
+	generalForm.onsubmit = async (e) => {
+		e.preventDefault();
+		const formData = new FormData(generalForm);
+		const settings = Object.fromEntries(formData);
+
+		Object.keys(settings).forEach((key, index) => {
+			let newValue = settings[key];
+			if (newValue === "on") newValue = true;
+			settings[key] = newValue;
+		});
+
+		await setGeneralSettings(domain, settings);
+	};
+	// End General Settings
+
+	// Account Settings
 	const username_input = accountForm.querySelector("input[name='username']");
 	const password_input = accountForm.querySelector("input[name='password']");
 	const account_submit = accountForm.querySelector("button[type='submit']");
 
-	const settings = await getCreds(domain);
-	username_input.value = settings.username || "";
-	password_input.placeholder = "*".repeat(settings.password.length) || "";
+	const credentials = await getCredentials(domain);
+	username_input.value = credentials.username || "";
+	password_input.placeholder = "*".repeat(credentials.password.length) || "";
 
 	account_submit.disabled = !username_input.value || !password_input.value;
 	username_input.oninput = password_input.oninput = () => {
@@ -29,15 +54,42 @@ async function main() {
 	accountForm.onsubmit = async (e) => {
 		e.preventDefault();
 		const formData = new FormData(accountForm);
-		await setStorage("betterserv-credentials", {
-			[domain]: Object.fromEntries(formData),
-		});
+		await setCredentials(
+			domain,
+			formData.get("username"),
+			formData.get("password"),
+		);
 	};
+	// End Account Settings
 }
 
-async function getCreds(domain) {
-	const credentials = (await getStorage("betterserv-credentials")) || {};
-	return credentials[domain] || {};
+async function getGeneralSettings(domain) {
+	const generalSettings = await getStorage(`betterserv-general-${domain}`);
+	if (!generalSettings) {
+		await setStorage(`betterserv-general-${domain}`, {});
+		return {};
+	}
+	return generalSettings;
+}
+
+async function getCredentials(domain) {
+	const settings = await getStorage(`betterserv-credentials-${domain}`);
+	if (!settings) {
+		await setStorage(`betterserv-credentials-${domain}`, {
+			username: "",
+			password: "",
+		});
+		return {};
+	}
+	return settings;
+}
+
+async function setCredentials(domain, username, password) {
+	await setStorage(`betterserv-credentials-${domain}`, { username, password });
+}
+
+async function setGeneralSettings(domain, settings) {
+	await setStorage(`betterserv-general-${domain}`, settings);
 }
 
 async function getStorage(key) {

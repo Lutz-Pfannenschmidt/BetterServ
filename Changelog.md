@@ -1,5 +1,11 @@
 # BetterServ Changelog
 
+## V 0.1.10
+
+- some fun new features :D
+- The new file selection now works better (kinda)
+- Domain specific settings (Useless for now)
+
 ## V 0.1.9
 
 - various bug fixes and shenanigans

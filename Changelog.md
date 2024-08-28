@@ -1,5 +1,11 @@
 # BetterServ Changelog
 
+## V 0.2.0
+
+- Play Tic Tac Toe on your IServ homepage!
+- Configure Tic Tac Toe difficulty in the settings
+- Setting to hid the "last login" information
+
 ## V 0.1.12
 
 - dont wanna talk about it

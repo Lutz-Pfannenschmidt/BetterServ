@@ -7,6 +7,9 @@
   --betterserv-like: #c92f2f;
   --betterserv-secondary-btn: #54484a;
   --betterserv-accent: #d4692c;
+  --betterserv-ttt-empty: 51, 51, 51;
+  --betterserv-ttt-x: 201, 47, 47;
+  --betterserv-ttt-o: 45, 119, 178;
 }
 
 body {
@@ -173,6 +176,52 @@ a {
 }
 .betterserv-checkbox.like.checked {
   background-color: var(--betterserv-like);
+}
+
+.ttt-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1em;
+  margin: 0 auto;
+  width: 100%;
+  font-size: xx-large;
+}
+.ttt-wrapper #xScore {
+  color: rgb(var(--betterserv-ttt-x));
+}
+.ttt-wrapper #oScore {
+  color: rgb(var(--betterserv-ttt-o));
+}
+
+#tictactoegrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-gap: 5px;
+  width: min(100%, 12.5vw);
+  aspect-ratio: 1;
+  margin: 0;
+}
+#tictactoegrid div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  background-color: rgb(var(--betterserv-ttt-empty));
+  cursor: pointer;
+}
+#tictactoegrid div.x {
+  background-color: rgb(var(--betterserv-ttt-x));
+  cursor: not-allowed;
+}
+#tictactoegrid div.o {
+  background-color: rgb(var(--betterserv-ttt-o));
+  cursor: not-allowed;
+}
+#tictactoegrid div:hover:not(.x):not(.o) {
+  background-color: rgba(var(--betterserv-ttt-x), 0.3);
 }
 
 /*# sourceMappingURL=betterserv.css.map */

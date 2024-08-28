@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BetterServ Settings</title>
     <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css">
+    <link rel="stylesheet" href="../css/rainbow.css">
     <script defer src="settings.js"></script>
 </head>
 
@@ -23,6 +24,14 @@
                 <label>
                     <input type="checkbox" name="custom-files">
                     Custom file browser (WIP)
+                </label>
+                <label>
+                    <input type="checkbox" name="tictactoe">
+                    <span class="rainbow">Play Tic Tac Toe on the homepage :D</span>
+                </label>
+                <label>
+                    Tic Tac Toe difficulty (difficult to loose at 1, <b><i>very</i></b> unlikeley to win at 10):
+                    <input type="range" name="tictactoe-difficulty" min="1" max="10" step="1">
                 </label>
             </div>
         </fieldset>

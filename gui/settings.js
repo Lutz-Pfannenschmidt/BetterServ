@@ -15,12 +15,17 @@ async function main() {
 	}
 
 	// General Settings
-	const hide_login = generalForm.querySelector("input[name='hide-login']");
-	const custom_files = generalForm.querySelector("input[name='custom-files']");
-
 	const generalSettings = await getGeneralSettings(domain);
-	hide_login.checked = generalSettings["hide-login"] || false;
-	custom_files.checked = generalSettings["custom-files"] || false;
+	for (const key in generalSettings) {
+		const value = generalSettings[key];
+		const input = generalForm.querySelector(`input[name='${key}']`);
+		if (!input) continue;
+		if (input.type === "checkbox") {
+			input.checked = value;
+		} else {
+			input.value = value;
+		}
+	}
 
 	generalForm.onsubmit = async (e) => {
 		e.preventDefault();

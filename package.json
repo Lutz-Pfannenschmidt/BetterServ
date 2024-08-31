@@ -5,7 +5,8 @@
         "scss": "sass --watch scss:dist",
         "webpack": "npx webpack --config webpack.config.cjs --mode production",
         "webpack:watch": "npx webpack --config webpack.config.cjs --watch --mode development",
-        "build": "npm run webpack && sass scss:dist --style compressed && web-ext build -i scss/ src/ --overwrite-dest",
+        "build": "npm run webpack && sass scss:dist --style compressed && web-ext build -i scss/ src/ tsconfig.json webpack.config.cjs --overwrite-dest",
+        "lint": "npm run webpack && sass scss:dist --style compressed && web-ext lint -i scss/ src/ tsconfig.json webpack.config.cjs",
         "dev": "concurrently \"npm run webpack:watch\" \"npm run scss\" \"npm run webext\""
     },
     "devDependencies": {

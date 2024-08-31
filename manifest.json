@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "BetterServ",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "enhances IServ",
     "content_scripts": [
         {
@@ -9,16 +9,16 @@
                 "*://*/iserv*"
             ],
             "js": [
-                "js/betterserv.js",
-                "js/iservlist.js",
-                "js/hidelogin.js",
-                "js/tictactoe.js"
+                "dist/bettersidebar.js",
+                "dist/iservlist.js",
+                "dist/hidelogin.js",
+                "dist/tictactoe.js"
             ],
             "css": [
-                "css/symbols.css",
-                "css/ubuntu.css",
-                "css/betterserv.css",
-                "css/rainbow.css"
+                "dist/symbols.css",
+                "dist/ubuntu.css",
+                "dist/betterserv.css",
+                "dist/rainbow.css"
             ],
             "run_at": "document_start"
         },
@@ -27,7 +27,7 @@
                 "*://*/iserv/file*"
             ],
             "js": [
-                "js/betterfiles.js"
+                "dist/betterfiles.js"
             ],
             "run_at": "document_start"
         }
@@ -39,11 +39,11 @@
     ],
     "browser_action": {
         "default_title": "BetterServ",
-        "default_popup": "gui/index.html"
+        "default_popup": "static/index.html"
     },
     "icons": {
-        "192": "icons/android-chrome-192x192.png",
-        "512": "icons/android-chrome-512x512.png"
+        "192": "img/android-chrome-192x192.png",
+        "512": "img/android-chrome-512x512.png"
     },
     "browser_specific_settings": {
         "gecko": {

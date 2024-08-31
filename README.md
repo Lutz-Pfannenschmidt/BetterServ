@@ -6,6 +6,7 @@ If you are an representative of the IServ GmbH and want this project to be taken
 
 ## License
 This project is licensed under the [CC BY-NC-SA 4.0 license](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+![CC BY-NC-SA](./by-nc-sa.png)
 
 ## Description
 Enhances the look of you schools  "IServ" Website by injecting CSS and JavaScript code.

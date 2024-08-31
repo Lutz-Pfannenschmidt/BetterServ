@@ -1,5 +1,9 @@
 # BetterServ Changelog
 
+## V 0.3.0
+
+- TS rewrite
+
 ## V 0.2.0
 
 - Play Tic Tac Toe on your IServ homepage!

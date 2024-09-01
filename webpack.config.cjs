@@ -7,7 +7,6 @@ module.exports = {
 		hidelogin: "./src/hidelogin.ts",
 		iservlist: "./src/iservlist.ts",
 		tictactoe: "./src/tictactoe.ts",
-		fileblocker: "./src/background/fileblocker.ts",
 	},
 	devtool: false,
 	output: {

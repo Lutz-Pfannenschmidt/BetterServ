@@ -32,4 +32,12 @@ export class BetterServLogger {
             console.warn(`%c${this.prefix}`, "color: orange", message);
         }
     }
+
+    error(message: string, e: unknown = null) {
+        if (e !== null) {
+            console.error(`%c${this.prefix}`, "color: red", message, e);
+        } else {
+            console.error(`%c${this.prefix}`, "color: red", message);
+        }
+    }
 }

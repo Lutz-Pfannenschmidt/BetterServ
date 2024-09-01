@@ -45,7 +45,7 @@
     },
     "background": {
         "scripts": [
-            "dist/fileblocker.js"
+            "static/fileblocker.js"
         ]
     },
     "icons": {

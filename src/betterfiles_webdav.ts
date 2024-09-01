@@ -1,6 +1,7 @@
 import { AuthType, createClient, ResponseDataDetailed, type FileStat, type WebDAVClient } from "webdav";
 import { BetterServLogger } from "./betterServLogger";
-import { type BetterStarred, getCredentialsForDomain, getStarredFilesForDomain, setStarredFilesForDomain } from "./storage";
+import { type BetterStarred, getCredentialsForDomain, getGeneralSettingsForDomain, getStarredFilesForDomain, setStarredFilesForDomain } from "./storage";
+import { browser } from "browser-namespace";
 
 const logger = new BetterServLogger("WebDAV");
 let rtf: Intl.RelativeTimeFormat;
@@ -10,7 +11,17 @@ let client: WebDAVClient;
 setup();
 
 async function setup() {
+    const generalSettings = await getGeneralSettingsForDomain(window.location.host);
     const credentials = await getCredentialsForDomain(window.location.host);
+
+    const interval = setInterval(async () => { removePageLoader(interval) }, 10);
+
+    if (!credentials) {
+        logger.error("No credentials found for this domain");
+        notifyNoCredentials();
+        return;
+    }
+
     client = createClient(`https://webdav.${window.location.host}/`, {
         username: credentials.username,
         password: credentials.password,
@@ -23,7 +34,6 @@ async function setup() {
         populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement);
     });
 
-    const interval = setInterval(async () => { removePageLoader(interval) }, 10);
     logger.log("Setup complete");
 }
 
@@ -34,6 +44,26 @@ async function removePageLoader(interval: NodeJS.Timeout) {
     logger.log("Page loader removed");
     clearInterval(interval);
 }
+
+function notifyNoCredentials() {
+    const content = document.getElementById("content");
+    if (!content) return;
+    content.innerHTML = `
+        <div class="betterserv-notify">
+            <h1>No credentials found for this domain</h1>
+            <p>Please go to the BetterServ settings and enter your credentials for this domain to use BetterFiles</p>
+            <a href="#">Go to settings</a>
+        </div>
+    `;
+
+    const settingsLink = content.querySelector("a");
+    if (!settingsLink) return;
+    settingsLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location = `${browser.runtime.getURL("static/settings.html")}?iserv=${window.location.host}` as unknown as Location;
+    });
+}
+
 
 async function main() {
     const content = document.getElementById("content");

@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "BetterServ",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "Make IServ great again! (more like great for the first time)",
     "content_scripts": [
         {

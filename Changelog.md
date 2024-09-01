@@ -1,5 +1,11 @@
 # BetterServ Changelog
 
+## V 0.3.1
+
+- BetterFiles now really is WAY better than the default file explorer.
+- "Liked" Files are now "Starred"
+- Because of technical reasons, all previously "liked" files are now gone, sorry.
+
 ## V 0.3.0
 
 - TS rewrite

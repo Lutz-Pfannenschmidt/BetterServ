@@ -1,5 +1,9 @@
 # BetterServ Changelog
 
+## V 0.3.2
+
+- minor fix: homepage starred files now actually link to the correct domain.
+
 ## V 0.3.1
 
 - BetterFiles now really is WAY better than the default file explorer.

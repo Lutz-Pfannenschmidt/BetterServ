@@ -64,6 +64,7 @@ async function buildSidebar(sidebar: HTMLDivElement) {
         const name = document.createElement("a");
         name.textContent = starredItem.name;
         name.href = starredItem.path;
+        if (starredItem.path.startsWith(window.location.host)) name.href = `https://${starredItem.path}`
         div.appendChild(name);
 
         starred.appendChild(div);

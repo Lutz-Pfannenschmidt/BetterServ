@@ -297,7 +297,7 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
     });
 
     const star_toggle = row.querySelectorAll(".star-toggle") as NodeListOf<HTMLElement>;
-    let isStarred = starred.some((star) => star.path.endsWith(`iserv/files/-${file.filename}`));
+    let isStarred = starred.some((star) => star.path.endsWith(`iserv/file/-${file.filename}`));
     if (file.type !== "directory" && star_toggle.length >= 1) star_toggle[0].style.display = "none";
     for (const el of star_toggle) {
         if (isStarred) el.classList.add("active");
@@ -308,10 +308,10 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
             console.log(starred);
 
             if (isStarred) {
-                starred.push({ path: `${window.location.host}/iserv/files/-${file.filename}`, name: file.basename });
+                starred.push({ path: `${window.location.host}/iserv/file/-${file.filename}`, name: file.basename });
                 setStarredFilesForDomain(window.location.host, starred);
             } else {
-                const new_starred = starred.filter((star) => !star.path.endsWith(`iserv/files/-${file.filename}`));
+                const new_starred = starred.filter((star) => !star.path.endsWith(`iserv/file/-${file.filename}`));
                 setStarredFilesForDomain(window.location.host, new_starred);
             }
         });

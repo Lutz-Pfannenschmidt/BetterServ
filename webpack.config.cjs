@@ -2,12 +2,14 @@ const path = require("node:path");
 
 module.exports = {
 	entry: {
-		betterfiles: "./src/betterfiles.ts",
+		betterfiles_webdav: "./src/betterfiles_webdav.ts",
 		bettersidebar: "./src/bettersidebar.ts",
 		hidelogin: "./src/hidelogin.ts",
 		iservlist: "./src/iservlist.ts",
 		tictactoe: "./src/tictactoe.ts",
+		fileblocker: "./src/background/fileblocker.ts",
 	},
+	devtool: false,
 	output: {
 		filename: "[name].js",
 		path: path.resolve(__dirname, "dist"),

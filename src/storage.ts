@@ -22,3 +22,35 @@ export interface GeneralSettings {
     "tictactoe": boolean;
     "tictactoe-difficulty": number;
 }
+
+export async function getCredentialsForDomain(domain: string): Promise<Credentials> {
+    return await getFromBrowserStorage(`betterserv-credentials-${domain}`) as Credentials;
+}
+
+export async function setCredentialsForDomain(domain: string, settings: Credentials): Promise<void> {
+    await setInBrowserStorage(`betterserv-credentials-${domain}`, settings);
+}
+
+export interface Credentials {
+    "username": string;
+    "password": string;
+}
+
+export async function getStarredFilesForDomain(domain: string): Promise<BetterStarred[]> {
+    const starred = await getFromBrowserStorage(`betterserv-starred-${domain}`) as BetterStarred[];
+    if (!Array.isArray(starred)) return [];
+    if (starred.length === 0) {
+        await setStarredFilesForDomain(domain, []);
+        return [];
+    }
+    return starred;
+}
+
+export async function setStarredFilesForDomain(domain: string, starred: BetterStarred[]): Promise<void> {
+    await setInBrowserStorage(`betterserv-starred-${domain}`, starred);
+}
+
+export interface BetterStarred {
+    "path": string;
+    "name": string;
+}

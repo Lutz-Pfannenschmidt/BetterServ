@@ -24,10 +24,10 @@
         },
         {
             "matches": [
-                "*://*/iserv/file*"
+                "*://*/iserv/file/-*"
             ],
             "js": [
-                "dist/betterfiles.js"
+                "dist/betterfiles_webdav.js"
             ],
             "run_at": "document_start"
         }
@@ -35,11 +35,18 @@
     "permissions": [
         "activeTab",
         "storage",
-        "https://tictactoe.responseplan.de/"
+        "<all_urls>",
+        "webRequest",
+        "webRequestBlocking"
     ],
     "browser_action": {
         "default_title": "BetterServ",
         "default_popup": "static/index.html"
+    },
+    "background": {
+        "scripts": [
+            "dist/fileblocker.js"
+        ]
     },
     "icons": {
         "192": "img/android-chrome-192x192.png",

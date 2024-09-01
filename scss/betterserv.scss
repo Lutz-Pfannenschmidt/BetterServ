@@ -26,18 +26,18 @@ body {
 }
 
 table {
-    background: inherit !important;
+    background: inherit;
 }
 
 a {
-    color: var(--betterserv-text) !important;
+    color: var(--betterserv-text);
 }
 
 #content {
-    background: var(--betterserv-bg) !important;
+    background: var(--betterserv-bg);
 
     a {
-        color: var(--betterserv-link) !important;
+        color: var(--betterserv-link);
     }
 }
 
@@ -45,6 +45,41 @@ a {
     background: linear-gradient(126deg, rgba(66, 10, 103, 1) 0%, rgba(126, 37, 37, 1) 50%, rgba(13, 18, 140, 1) 100%);
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
+
+    .topbar-breadcrumbs span,
+    .topbar-breadcrumbs a {
+        color: var(--betterserv-text);
+        padding: 0px 5px;
+    }
+
+    .topbar-breadcrumbs a {
+        text-decoration: underline;
+    }
+
+    button {
+        border: 1px solid var(--betterserv-btn) !important;
+        border-radius: 0.2em !important;
+        color: var(--betterserv-text) !important;
+    }
+
+    .betterserv-topbar-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 5px;
+        margin-right: 5px;
+
+        a {
+            border: 1px solid var(--betterserv-btn);
+            border-radius: 0.2em;
+            padding: 5px;
+            color: var(--betterserv-text);
+            font-size: 1em;
+
+            &.active {
+                background-color: var(--betterserv-btn);
+            }
+        }
+    }
 }
 
 @keyframes gradient {
@@ -260,6 +295,160 @@ a {
 
         &:hover:not(.x):not(.o) {
             background-color: rgba(var(--betterserv-ttt-x), 0.3);
+        }
+    }
+}
+
+.betterserv-table {
+    display: table;
+    width: calc(100% - 6em);
+    border-collapse: collapse;
+    margin: 3em;
+    background-color: var(--betterserv-content-bg);
+    font-size: 1em;
+
+    border: 1em solid var(--betterserv-content-bg);
+
+    svg {
+        cursor: pointer;
+        width: 2em;
+        height: 2em;
+    }
+
+    button {
+        all: unset;
+    }
+
+    .star-toggle {
+        &.active {
+            color: var(--betterserv-accent) !important;
+        }
+    }
+
+    .popover {
+        display: none;
+        position: absolute;
+        z-index: 1;
+        background-color: var(--betterserv-content-bg);
+        border: 1px solid var(--betterserv-btn);
+        border-radius: 0.2em;
+        padding: 0.5em;
+        color: var(--betterserv-text);
+        top: 50%;
+        left: 50%;
+        &.active {
+            display: block;
+        }
+    }
+
+    thead {
+        display: table-header-group;
+        color: var(--betterserv-text);
+        background-color: var(--betterserv-content-bg);
+    }
+
+    tbody {
+        display: table-row-group;
+        background-color: var(--betterserv-content-bg);
+    }
+
+    tr {
+        display: table-row;
+
+        &:hover {
+            background-color: var(--betterserv-bg);
+        }
+    }
+
+    th,
+    td {
+        display: table-cell;
+        padding: 0.25em;
+    }
+
+    th {
+        font-weight: bold;
+
+        &.check {
+            width: 2em;
+        }
+
+        &.name {
+            width: 50%;
+        }
+
+        &.size {
+            width: calc(30% - 12em);
+        }
+
+        &.mod {
+            width: 20%;
+        }
+
+        &.actions {
+            width: 5em;
+            color: var(--betterserv-text);
+        }
+    }
+
+    td {
+        color: var(--betterserv-text);
+    }
+}
+
+ul.betterserv-fileactions {
+    justify-content: space-around;
+    gap: 1em;
+    margin: 0.5em;
+    padding: 0;
+    list-style-type: none;
+
+    li {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+
+        a {
+            color: var(--betterserv-text);
+        }
+
+        &.center {
+            align-items: center;
+        }
+
+        &.right {
+            justify-content: flex-end;
+        }
+
+        &.danger {
+            color: var(--betterserv-accent);
+        }
+    }
+}
+
+#betterserv-starred {
+    * {
+        font-size: 1em;
+    }
+
+    div {
+        height: 2em;
+        display: flex;
+        align-items: center;
+        padding: 0.5em;
+    }
+
+    a.star-toggle {
+        all: unset;
+
+        svg {
+            cursor: pointer;
+            width: 2em;
+            height: 2em;
+        }
+
+        &.active {
+            color: var(--betterserv-accent) !important;
         }
     }
 }

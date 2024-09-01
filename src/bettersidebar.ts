@@ -1,6 +1,6 @@
 import { browser } from "browser-namespace";
 import { BetterServLogger } from "./betterServLogger";
-import { getFromBrowserStorage } from "./storage";
+import { getFromBrowserStorage, getStarredFilesForDomain, setStarredFilesForDomain } from "./storage";
 
 const logger = new BetterServLogger("Sidebar");
 
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function buildSidebar(sidebar: HTMLDivElement) {
     logger.log("Building sidebar");
-    let likedItems = await getFromBrowserStorage("betterserv-liked") as [string, string][];
+    let starredItems = await getStarredFilesForDomain(window.location.host);
 
     const betterServPanel = document.createElement("div");
     betterServPanel.classList.add("panel");
@@ -27,44 +27,46 @@ async function buildSidebar(sidebar: HTMLDivElement) {
         </div>
         <div class="panel-body">
 
-            ${likedItems.length > 0 ? '<h2>Liked Files</h2> <div id="betterserv-liked"></div>' : ""}
+            ${starredItems.length > 0 ? '<h2>Starred Files</h2> <div id="betterserv-starred"></div>' : ""}
 
         </div>`;
 
     sidebar.prepend(betterServPanel);
 
-    const liked = document.getElementById("betterserv-liked");
-    if (!liked) return
+    const starred = document.getElementById("betterserv-starred");
+    if (!starred) return
 
-    for (const likedItem of likedItems) {
-        if (!likedItem[0].includes(window.location.host)) continue;
+    for (const starredItem of starredItems) {
+        if (!starredItem.path.includes(window.location.host)) continue;
         const div = document.createElement("div");
 
-        const like_checkbox = document.createElement("a");
-        like_checkbox.classList.add("betterserv-checkbox", "like");
-        like_checkbox.href = "#";
-        like_checkbox.classList.add("checked");
-        like_checkbox.addEventListener("click", async (e) => {
+        const star_link = document.createElement("a");
+        star_link.classList.add("star-toggle");
+        star_link.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>`;
+        star_link.classList.add("active");
+        star_link.addEventListener("click", async (e) => {
             e.preventDefault();
-            like_checkbox.classList.toggle("checked");
+            star_link.classList.toggle("active");
+            const isStarred = star_link.classList.contains("active");
 
-            likedItems = likedItems.filter(
-                (item) => item[0] !== likedItem[0] && item[1] !== likedItem[1],
-            );
+            if (isStarred) {
+                starredItems.push(starredItem);
+            } else {
+                starredItems = starredItems.filter(
+                    (item) => item.path !== starredItem.path && item.name !== starredItem.name,
+                );
+            }
+            setStarredFilesForDomain(window.location.host, starredItems);
 
-            await browser.storage.sync.set({
-                "betterserv-liked": likedItems,
-            });
-            div.outerHTML = "";
         });
-        div.appendChild(like_checkbox);
+        div.appendChild(star_link);
 
         const name = document.createElement("a");
-        name.textContent = likedItem[1];
-        name.href = likedItem[0];
+        name.textContent = starredItem.name;
+        name.href = starredItem.path;
         div.appendChild(name);
 
-        liked.appendChild(div);
+        starred.appendChild(div);
     }
 }
 

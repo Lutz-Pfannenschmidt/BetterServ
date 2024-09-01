@@ -20,6 +20,7 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
-        "browser-namespace": "^1.4.0"
+        "browser-namespace": "^1.4.0",
+        "webdav": "^5.7.1"
     }
 }

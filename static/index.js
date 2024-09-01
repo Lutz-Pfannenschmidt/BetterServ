@@ -7,7 +7,7 @@ async function main() {
 	div.innerHTML = `
         <h2>IServ Settings</h2>
         <ul>
-            ${urls.map((url) => `<li><a target="_blank" href="${browser.runtime.getURL("gui/settings.html")}?iserv=${url}">${url}</a></li>`).join("")}
+            ${urls.map((url) => `<li><a target="_blank" href="${browser.runtime.getURL("static/settings.html")}?iserv=${url}">${url}</a></li>`).join("")}
         </ul>
     `;
 }

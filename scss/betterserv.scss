@@ -305,7 +305,7 @@ a {
     border-collapse: collapse;
     margin: 3em;
     background-color: var(--betterserv-content-bg);
-    font-size: 1em;
+    font-size: 1.25em;
 
     border: 1em solid var(--betterserv-content-bg);
 
@@ -393,6 +393,19 @@ a {
 
     td {
         color: var(--betterserv-text);
+
+        a:not(.star-toggle) {
+            line-height: 2em;
+            align-items: center;
+            display: flex;
+
+            svg {
+                width: 1.5em;
+                height: 1.5em;
+                color: var(--betterserv-text);
+                margin-right: 0.2em;
+            }
+        }
     }
 }
 

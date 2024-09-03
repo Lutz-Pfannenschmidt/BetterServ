@@ -1,5 +1,11 @@
 # BetterServ Changelog
 
+## V 0.3.3
+
+- Clicking on files now actually opens them in the browser instead of downloading them.
+- Added File / Folder Icons
+- Removed redundant "Open" button
+
 ## V 0.3.2
 
 - minor fix: homepage starred files now actually link to the correct domain.

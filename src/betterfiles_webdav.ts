@@ -227,7 +227,12 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
     if (href === window.location.toString()) return null;
     row.innerHTML = `
         <td><input type="checkbox"></input></td>
-        <td><a href="${`${href}`}">${file.basename}${file.type === "directory" ? "/" : ""}</a></td>
+        <td><a class="betterserv-open" href="${href}">
+            ${file.type === "directory" ?
+            `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" /></svg>` :
+            `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>`}
+            ${file.basename}${file.type === "directory" ? "/" : ""}
+            </a></td>
         <td class="size">${file.type === "file" ? readableFileSize(file.size) : "Loading..."}</td>
         <td>${relativeDate(lastmod)}</td>
         <td>
@@ -240,7 +245,6 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
             <div class="popover">
                 <ul class="betterserv-fileactions">
                     <li><a class="betterserv-download" download>Download</a></li>
-                    <li><a class="betterserv-open" target="_blank">Open</a></li>
                     <li><a class="star-toggle"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg></a></li>
                 </ul>
             </div>  
@@ -250,19 +254,29 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
     if (file.type === "directory") {
         (client.getDirectoryContents(file.filename) as Promise<FileStat[]>).then((data) => {
             const sizeElement = row.querySelector(".size") as HTMLElement;
-            sizeElement.textContent = `Contains ${data.length} Files and Folders`;
-            if (data.length === 1) sizeElement.textContent = "Contains 1 File or Folder";
+            sizeElement.textContent = `Contains ${data.length} Files`;
+            if (data.length === 1) sizeElement.textContent = "Contains 1 File";
             if (data.length === 0) sizeElement.textContent = "Empty";
+        });
+
+        row.querySelector("a")?.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.history.pushState({}, "", href);
+            populateContent(file.filename, row.parentElement?.parentElement as HTMLTableElement);
+        });
+
+    } else {
+        const anchor = row.querySelector(".betterserv-open") as HTMLAnchorElement;
+        anchor.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.open(href, "_blank");
         });
     }
 
     const downloadLink = row.querySelector(".betterserv-download") as HTMLAnchorElement;
     downloadLink.href = client.getFileDownloadLink(file.filename)
-
-    row.querySelector("a")?.addEventListener("click", (e) => {
-        e.preventDefault();
-        window.history.pushState({}, "", href);
-        populateContent(file.filename, row.parentElement?.parentElement as HTMLTableElement);
+    downloadLink.addEventListener("click", () => {
+        window.open(downloadLink.href, "_blank");
     });
 
     const actions_toggle = row.querySelector(".actions-toggle") as HTMLElement;
@@ -303,11 +317,9 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
         if (isStarred) el.classList.add("active");
         el.addEventListener("click", () => {
             el.classList.toggle("active");
-            isStarred = !isStarred
+            let star = el.classList.contains("active");
 
-            console.log(starred);
-
-            if (isStarred) {
+            if (star) {
                 starred.push({ path: `${window.location.host}/iserv/file/-${file.filename}`, name: file.basename });
                 setStarredFilesForDomain(window.location.host, starred);
             } else {

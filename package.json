@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "browser-namespace": "^1.4.0",
-        "webdav": "^5.7.1"
+        "webdav": "^5.7.1",
+        "webuntis": "^2.2.1"
     }
 }

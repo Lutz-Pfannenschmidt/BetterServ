@@ -25,33 +25,15 @@ async function main(): Promise<void> {
 
     const grid = document.getElementById("tictactoegrid") as HTMLElement;
     const cells: (string | null)[] = Array(9).fill(null);
-    const xStarted = true;
-    let canTurn = true;
+    let xStarted = false;
+    let canTurn = false;
 
-    const handleClick = async (index: number, cell: HTMLElement): Promise<void> => {
-        if (cells[index] !== null || !canTurn) return;
-        canTurn = false;
-
-        makeMove(index, "X", cell);
-
-        let winner = checkTicTacToeWinner(cells);
-        if (handleWinner(winner)) return;
-
-        const difficulty = Math.max(settings["tictactoe-difficulty"] || 1, 1);
-        const moves = await getNextMoves(cells, xStarted);
-        if (!moves) {
-            resetGame();
-            return;
-        }
-
-        const moveIndex = selectMove(moves, difficulty);
-        makeMove(moves[moveIndex], "O", grid.children[moves[moveIndex]] as HTMLElement);
-
-        winner = checkTicTacToeWinner(cells);
-        if (handleWinner(winner)) return;
-
-        canTurn = true;
-    };
+    cells.forEach((_, i) => {
+        const cell = document.createElement("div");
+        cell.dataset.index = i.toString();
+        cell.onclick = () => handleClick(i, cell);
+        grid.appendChild(cell);
+    });
 
     const makeMove = (index: number, symbol: string, cell: HTMLElement): void => {
         cells[index] = symbol;
@@ -77,6 +59,7 @@ async function main(): Promise<void> {
                 oScoreElem.textContent = (oScore + 1).toString();
                 break;
         }
+
         resetGame();
         return true;
     };
@@ -84,19 +67,44 @@ async function main(): Promise<void> {
     const resetGame = (): void => {
         cells.fill(null);
         resetGrid();
-        canTurn = true;
+        xStarted = Math.random() < 0.5;
+        canTurn = xStarted;
     };
 
     const selectMove = (moves: number[], difficulty: number): number => {
         return Math.floor(moves.length * Math.log2(1 + Math.random() / difficulty));
     };
 
-    cells.forEach((_, i) => {
-        const cell = document.createElement("div");
-        cell.dataset.index = i.toString();
-        cell.onclick = () => handleClick(i, cell);
-        grid.appendChild(cell);
-    });
+    if (!xStarted) {
+        const move = Math.floor(9 * Math.random());
+        makeMove(move, "O", grid.children[move] as HTMLElement);
+        canTurn = true;
+    }
+
+    const handleClick = async (index: number, cell: HTMLElement): Promise<void> => {
+        if (cells[index] !== null || !canTurn) return;
+        canTurn = false;
+
+        makeMove(index, "X", cell);
+
+        let winner = checkTicTacToeWinner(cells);
+        if (handleWinner(winner)) return;
+
+        const difficulty = Math.max(settings["tictactoe-difficulty"] || 1, 1);
+        const moves = await getNextMoves(cells, xStarted);
+        if (!moves) {
+            resetGame();
+            return;
+        }
+
+        const moveIndex = selectMove(moves, difficulty);
+        makeMove(moves[moveIndex], "O", grid.children[moves[moveIndex]] as HTMLElement);
+
+        winner = checkTicTacToeWinner(cells);
+        if (handleWinner(winner)) return;
+
+        canTurn = true;
+    };
 
     const emoji = document.querySelector(".asciimoji") as HTMLElement;
     const asciimojis = [

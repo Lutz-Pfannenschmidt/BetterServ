@@ -1,5 +1,10 @@
 # BetterServ Changelog
 
+## V 0.3.4
+
+- The tictactoe AI now makes the first move every game to encourage playing.
+- After the first game, the starting player is chosen randomly.
+
 ## V 0.3.3
 
 - Clicking on files now actually opens them in the browser instead of downloading them.

@@ -1,6 +1,6 @@
 # BetterServ Changelog
 
-## V 0.3.4
+## V 0.3.5
 
 - BetterFiles now hast multiselect! You can now select multiple files and folders at once and download them all at once.
 - Added a "Download" button to the file selection menu.

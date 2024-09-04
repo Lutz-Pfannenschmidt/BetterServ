@@ -28,6 +28,10 @@ async function setup() {
         authType: AuthType.Password
     });
 
+    document.addEventListener("dragover", dragOverHandler);
+    document.addEventListener("dragleave", dragLeaveHandler);
+    document.addEventListener("drop", dropHandler);
+
     document.addEventListener("DOMContentLoaded", main);
 
     window.addEventListener("popstate", () => {
@@ -70,9 +74,16 @@ async function main() {
 
     if (!content) return;
 
-    const table = generateContent();
+    const draggingOverlay = document.createElement("div");
+    draggingOverlay.classList.add("dragging-overlay");
+    document.body.appendChild(draggingOverlay);
+
+
+    const table = createTable();
+    const actions = createActions();
     content.innerHTML = "";
     content.appendChild(table);
+    content.appendChild(actions);
 
     const path = window.location.toString().split("/-/")[1];
 
@@ -182,7 +193,7 @@ function makeBreadcrumbs() {
 
 }
 
-function generateContent(): HTMLTableElement {
+function createTable(): HTMLTableElement {
     const table = document.createElement("table");
     table.classList.add("betterserv-table");
     table.innerHTML = `
@@ -198,6 +209,82 @@ function generateContent(): HTMLTableElement {
         <tbody></tbody>
     `;
     return table;
+}
+
+function createActions(): HTMLDivElement {
+    const actions = document.createElement("div");
+    actions.classList.add("betterserv-multifile-actions");
+
+    actions.innerHTML = `
+        <button class="betterserv-download-selected">Download Selected Files</button>
+        <button class="betterserv-new-folder">New Folder</button>
+        <button class="betterserv-upload">Upload (or just drag and drop)</button>
+        <button class="betterserv-delete-selected danger right">Delete Selected</button>
+    `;
+
+    const downloadSelected = actions.querySelector(".betterserv-download-selected") as HTMLButtonElement;
+    downloadSelected.addEventListener("click", async () => {
+        const files = getCheckedFiles();
+        for (const file of files) {
+            downloadIfFile(file);
+        }
+    });
+
+    const newFolder = actions.querySelector(".betterserv-new-folder") as HTMLButtonElement;
+    newFolder.addEventListener("click", async () => {
+        const folderName = prompt("Enter the name of the new folder");
+        if (!folderName) return;
+        await client.createDirectory(`${window.location.toString().split("/-/")[1]}/${folderName.trim()}`);
+        populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement
+        );
+    });
+
+    const upload = actions.querySelector(".betterserv-upload") as HTMLButtonElement;
+    upload.addEventListener("click", async () => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.multiple = true;
+        input.click();
+        input.addEventListener("change", async () => {
+            if (!input.files) return;
+            const files = Array.from(input.files);
+            for (const file of files) {
+                const path = `${window.location.toString().split("/-/")[1]}/${file.name}`;
+                await client.putFileContents(path, await file.text());
+            }
+            populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement);
+        }
+        );
+    }
+    );
+
+
+    const deleteSelected = actions.querySelector(".betterserv-delete-selected") as HTMLButtonElement;
+    deleteSelected.addEventListener("click", async () => {
+        const files = getCheckedFiles();
+
+        const confirmDelete = confirm(`Are you sure you want to delete ${files.length} files?`);
+        if (!confirmDelete) return;
+
+        await Promise.all(files.map((file) => client.deleteFile(file)));
+        populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement);
+    });
+
+    return actions;
+}
+
+function getCheckedFiles(): string[] {
+    const checkboxes = document.querySelectorAll(".betterserv-table input[type='checkbox']:checked");
+    const files = Array.from(checkboxes).map((checkbox) => {
+        const row = checkbox.parentElement?.parentElement as HTMLTableRowElement | null;
+        if (!row) return "";
+        const link = row.querySelector(".betterserv-download") as HTMLAnchorElement | null;
+        if (!link) return "";
+
+        return decodeURIComponent(link.href.split(window.location.host)[1]);
+    });
+
+    return files;
 }
 
 function makeDotDotRow(): HTMLTableRowElement {
@@ -224,7 +311,7 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
     const row = document.createElement("tr");
     const href = `${window.location.toString().split("/-/")[0]}/-${file.filename}`;
     const lastmod = new Date(file.lastmod)
-    if (href === window.location.toString()) return null;
+    if (href === decodeURI(window.location.toString())) return null;
     row.innerHTML = `
         <td><input type="checkbox"></input></td>
         <td><a class="betterserv-open" href="${href}">
@@ -245,6 +332,7 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
             <div class="popover">
                 <ul class="betterserv-fileactions">
                     <li><a class="betterserv-download" download>Download</a></li>
+                    <li><a class="betterserv-rename" href="#">Rename</a></li>
                     <li><a class="star-toggle"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg></a></li>
                 </ul>
             </div>  
@@ -272,6 +360,16 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
             window.open(href, "_blank");
         });
     }
+
+    const renameLink = row.querySelector(".betterserv-rename") as HTMLAnchorElement;
+    renameLink.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const newName = prompt("Enter the new name of the file", file.basename);
+        if (!newName) return;
+        await client.moveFile(file.filename, `${window.location.toString().split("/-/")[1]}/${newName}`);
+        populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement
+        );
+    });
 
     const downloadLink = row.querySelector(".betterserv-download") as HTMLAnchorElement;
     downloadLink.href = client.getFileDownloadLink(file.filename)
@@ -311,13 +409,13 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
     });
 
     const star_toggle = row.querySelectorAll(".star-toggle") as NodeListOf<HTMLElement>;
-    let isStarred = starred.some((star) => star.path.endsWith(`iserv/file/-${file.filename}`));
+    const isStarred = starred.some((star) => star.path.endsWith(`iserv/file/-${file.filename}`));
     if (file.type !== "directory" && star_toggle.length >= 1) star_toggle[0].style.display = "none";
     for (const el of star_toggle) {
         if (isStarred) el.classList.add("active");
         el.addEventListener("click", () => {
             el.classList.toggle("active");
-            let star = el.classList.contains("active");
+            const star = el.classList.contains("active");
 
             if (star) {
                 starred.push({ path: `${window.location.host}/iserv/file/-${file.filename}`, name: file.basename });
@@ -356,4 +454,59 @@ function readableFileSize(size: number): string {
         unitIndex++;
     }
     return `${updatedSize.toFixed(2)} ${units[unitIndex]}`;
+}
+
+async function downloadIfFile(path: string) {
+    const stat = await client.stat(path) as FileStat;
+    if (stat.type === "file") {
+        window.open(client.getFileDownloadLink(path), "_blank");
+    }
+}
+
+function dragOverHandler(e: DragEvent) {
+    e.preventDefault();
+    document.body.classList.add("dragging");
+}
+
+function dragLeaveHandler(e: DragEvent) {
+    e.preventDefault();
+    document.body.classList.remove("dragging");
+}
+
+async function dropHandler(e: DragEvent) {
+    document.body.classList.remove("dragging");
+    e.preventDefault();
+    if (!e.dataTransfer) return;
+    const items = e.dataTransfer.items;
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i].webkitGetAsEntry()
+        if (!item) continue;
+        await scanItem(item);
+    }
+    populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement);
+}
+
+async function scanItem(item: FileSystemEntry) {
+    if (item.isDirectory) {
+        await handleFolder(item as FileSystemDirectoryEntry);
+    } else {
+        await handleFile(item as FileSystemFileEntry);
+    }
+}
+
+async function handleFile(item: FileSystemFileEntry) {
+    const file = await new Promise<File>((resolve) => item.file(resolve));
+    const path = `${window.location.toString().split("/-/")[1]}/${item.fullPath}`;
+    await client.putFileContents(path, await file.text());
+}
+
+async function handleFolder(item: FileSystemDirectoryEntry) {
+    await client.createDirectory(`${window.location.toString().split("/-/")[1]}/${item.fullPath}`);
+
+    const directoryReader = item.createReader();
+    directoryReader.readEntries(async (entries) => {
+        for (const entry of entries) {
+            await scanItem(entry);
+        }
+    });
 }

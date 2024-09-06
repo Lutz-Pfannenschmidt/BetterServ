@@ -1,9 +1,13 @@
 # BetterServ Changelog
 
-## V 0.3.4
+## V 0.3.5
 
-- The tictactoe AI now makes the first move every game to encourage playing.
-- After the first game, the starting player is chosen randomly.
+- BetterFiles now hast multiselect! You can now select multiple files and folders at once and download them all at once.
+- Added a "Download" button to the file selection menu.
+- Added Upload button to the file selection menu.
+- Added recursive folder upload. You can now upload folders with all their contents using drag and drop.
+- Added a "New Folder" button to the file selection menu.
+- Added a "Delete" button to the file selection menu.
 
 ## V 0.3.3
 

@@ -355,9 +355,17 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
 
     } else {
         const anchor = row.querySelector(".betterserv-open") as HTMLAnchorElement;
-        anchor.addEventListener("click", (e) => {
+        anchor.addEventListener("click", async (e) => {
             e.preventDefault();
-            window.open(href, "_blank");
+            let tmpHref = href;
+            if (file.filename.endsWith(".url")) {
+                const content = await client.getFileContents(file.filename) as ArrayBuffer;
+                const decoder = new TextDecoder("utf-8");
+                const text = decoder.decode(content);
+                tmpHref = text.split("\n")[1].split("URL=")[1].trim();
+            }
+
+            window.open(tmpHref, "_blank");
         });
     }
 

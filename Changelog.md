@@ -1,5 +1,9 @@
 # BetterServ Changelog
 
+## V 0.3.6
+
+- when clicking an ".url" file, the link will now open in a new tab.
+
 ## V 0.3.5
 
 - BetterFiles now hast multiselect! You can now select multiple files and folders at once and download them all at once.

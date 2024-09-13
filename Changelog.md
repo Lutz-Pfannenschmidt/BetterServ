@@ -1,5 +1,9 @@
 # BetterServ Changelog
 
+## V 0.3.7
+
+- Icon for ".url" files is now a link icon.
+
 ## V 0.3.6
 
 - when clicking an ".url" file, the link will now open in a new tab.

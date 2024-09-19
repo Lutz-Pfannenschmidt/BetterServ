@@ -3,6 +3,9 @@
     "name": "BetterServ",
     "version": "0.3.7",
     "description": "Make IServ great again! (more like great for the first time)",
+    "chrome_url_overrides": {
+        "newtab": "static/newtab.html"
+    },
     "content_scripts": [
         {
             "matches": [

@@ -1,0 +1,52 @@
+:root {
+    --betterserv-bg: #191919;
+    --betterserv-content-bg: #1c1c1c;
+    --betterserv-text: #ffffff;
+    --betterserv-link: #2d77b2;
+    --betterserv-btn: #396b62;
+    --betterserv-like: #c92f2f;
+    --betterserv-secondary-btn: #54484a;
+    --betterserv-accent: #d4692c;
+
+    --betterserv-warn: #c92f2f;
+    --betterserv-info: #2d77b2;
+    --betterserv-success: #396b62;
+
+    --betterserv-ttt-empty: 51, 51, 51; // #333333
+    --betterserv-ttt-x: 201, 47, 47; // #c92f2f
+    --betterserv-ttt-o: 45, 119, 178; // #2d77b2
+
+    --betterserv-topbar-gradient: linear-gradient(
+        126deg,
+        rgba(66, 10, 103, 1) 0%,
+        rgba(126, 37, 37, 1) 50%,
+        rgba(13, 18, 140, 1) 100%
+    );
+    --betterserv-topbar-text: #ffffff;
+
+    --beterserv-files-font-size: 1em;
+}
+
+:root:has(body.light-theme) {
+    --betterserv-bg: #f0f0f0;
+    --betterserv-content-bg: #ffffff;
+    --betterserv-text: #000000;
+    --betterserv-link: #2d77b2;
+    --betterserv-btn: #396b62;
+    --betterserv-like: #c92f2f;
+    --betterserv-secondary-btn: #54484a;
+    --betterserv-accent: #d4692c;
+
+    --betterserv-warn: #c92f2f;
+    --betterserv-info: #2d77b2;
+    --betterserv-success: #396b62;
+
+    --betterserv-ttt-empty: 255, 255, 255; // #ffffff
+    --betterserv-ttt-x: 201, 47, 47; // #c92f2f
+    --betterserv-ttt-o: 45, 119, 178; // #2d77b2
+
+    --betterserv-topbar-gradient: linear-gradient(126deg, #feac5e, #c779d0, #4bc0c8);
+    --betterserv-topbar-text: #ffffff;
+
+    --beterserv-files-font-size: 1em;
+}

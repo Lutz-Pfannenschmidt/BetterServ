@@ -7,6 +7,7 @@ module.exports = {
 		hidelogin: "./src/hidelogin.ts",
 		iservlist: "./src/iservlist.ts",
 		tictactoe: "./src/tictactoe.ts",
+		newtab: "./src/newtab.ts",
 		// betterpdf: "./src/betterpdf.ts",
 		// betteruntis: "./src/betteruntis.ts",
 	},

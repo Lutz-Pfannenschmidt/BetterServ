@@ -1,4 +1,4 @@
-:root {
+@mixin theme_dark {
     --betterserv-bg: #191919;
     --betterserv-content-bg: #1c1c1c;
     --betterserv-text: #ffffff;
@@ -27,7 +27,7 @@
     --beterserv-files-font-size: 1em;
 }
 
-:root:has(body.light-theme) {
+@mixin theme_light {
     --betterserv-bg: #f0f0f0;
     --betterserv-content-bg: #ffffff;
     --betterserv-text: #000000;
@@ -49,4 +49,24 @@
     --betterserv-topbar-text: #ffffff;
 
     --beterserv-files-font-size: 1em;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        @include theme_dark;
+    }
+
+    :root:has(body.light-theme) {
+        @include theme_light;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        @include theme_light;
+    }
+
+    :root:has(body.dark-theme) {
+        @include theme_dark;
+    }
 }

@@ -11,6 +11,7 @@
     },
     "devDependencies": {
         "@types/node": "^22.5.1",
+        "browser-namespace": "^1.4.0",
         "concurrently": "^8.2.2",
         "sass": "^1.77.8",
         "ts-loader": "^9.5.1",
@@ -20,7 +21,6 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
-        "browser-namespace": "^1.4.0",
         "tesseract.js": "^5.1.1",
         "webdav": "^5.7.1",
         "webuntis": "^2.2.1"

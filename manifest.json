@@ -37,9 +37,7 @@
         "storage",
         "<all_urls>",
         "webRequest",
-        "webRequestBlocking",
-        "history",
-        "bookmarks"
+        "webRequestBlocking"
     ],
     "browser_action": {
         "default_title": "BetterServ",

@@ -1,2 +1,2 @@
-window.open(browser.runtime.getURL("static/dashboard.html"), "_blank");
+window.open(browser.runtime.getURL("static/dashboard.html"), "_unfencedTop");
 window.close();

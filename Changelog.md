@@ -1,5 +1,11 @@
 # BetterServ Changelog
 
+## V 0.4.0
+
+- Dashboard now replaces the Popup, the dashboard allows to easily switch between multiple IServs.
+- Dashboard shows unseen Emails, your WebUntis timetable and Starred Files.
+- Added a "Settings" button to the dashboard.
+
 ## V 0.3.7
 
 - Icon for ".url" files is now a link icon.

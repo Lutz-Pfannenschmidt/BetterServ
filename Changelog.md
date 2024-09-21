@@ -1,5 +1,9 @@
 # BetterServ Changelog
 
+## V 0.4.1
+
+- fix some bugs
+
 ## V 0.4.0
 
 - Dashboard now replaces the Popup, the dashboard allows to easily switch between multiple IServs.

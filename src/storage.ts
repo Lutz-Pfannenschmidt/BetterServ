@@ -54,3 +54,18 @@ export interface BetterStarred {
     "path": string;
     "name": string;
 }
+
+export async function getUntisCredentialsForDomain(domain: string): Promise<UntisCredentials> {
+    return await getFromBrowserStorage(`betterserv-untis-${domain}`) as UntisCredentials;
+}
+
+export async function setUntisCredentialsForDomain(domain: string, settings: UntisCredentials): Promise<void> {
+    await setInBrowserStorage(`betterserv-untis-${domain}`, settings);
+}
+
+export interface UntisCredentials {
+    "school": string;
+    "username": string;
+    "password": string;
+    "url": string;
+}

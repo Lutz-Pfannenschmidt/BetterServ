@@ -10,6 +10,7 @@
         "dev": "concurrently \"npm run webpack:watch\" \"npm run scss\" \"npm run webext\""
     },
     "devDependencies": {
+        "@types/lodash": "^4.17.7",
         "@types/node": "^22.5.1",
         "browser-namespace": "^1.4.0",
         "concurrently": "^8.2.2",
@@ -21,6 +22,7 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
+        "lodash": "^4.17.21",
         "tesseract.js": "^5.1.1",
         "webdav": "^5.7.1",
         "webuntis": "^2.2.1"

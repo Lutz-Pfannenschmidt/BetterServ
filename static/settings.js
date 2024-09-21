@@ -66,6 +66,49 @@ async function main() {
 		);
 	};
 	// End Account Settings
+
+	// Untis Account Settings
+	const untisForm = document.getElementById("untis_account");
+	const untis_school_input = untisForm.querySelector("input[name='school']");
+	const untis_url_input = untisForm.querySelector("input[name='url']");
+	const untis_uname_input = untisForm.querySelector("input[name='username']");
+	const untis_pwd_input = untisForm.querySelector("input[name='password']");
+	const untis_submit = untisForm.querySelector("button[type='submit']");
+
+	const untis_credentials = await getUntisCredentials(domain);
+	untis_school_input.value = untis_credentials.school || "";
+	untis_url_input.value = untis_credentials.url || "";
+	untis_uname_input.value = untis_credentials.username || "";
+	untis_pwd_input.placeholder =
+		"*".repeat(untis_credentials.password.length) || "";
+
+	untis_submit.disabled =
+		!untis_school_input.value ||
+		!untis_url_input.value ||
+		!untis_uname_input.value ||
+		!untis_pwd_input.value;
+	untis_school_input.oninput =
+		untis_url_input.oninput =
+		untis_uname_input.oninput =
+		untis_pwd_input.oninput =
+			() => {
+				untis_submit.disabled =
+					!untis_school_input.value ||
+					!untis_url_input.value ||
+					!untis_uname_input.value ||
+					!untis_pwd_input.value;
+			};
+
+	untisForm.onsubmit = async (e) => {
+		e.preventDefault();
+		const formData = new FormData(untisForm);
+		await setStorage(`betterserv-untis-${domain}`, {
+			school: formData.get("school"),
+			url: formData.get("url"),
+			username: formData.get("username"),
+			password: formData.get("password"),
+		});
+	};
 }
 
 async function getGeneralSettings(domain) {
@@ -81,6 +124,20 @@ async function getCredentials(domain) {
 	const settings = await getStorage(`betterserv-credentials-${domain}`);
 	if (!settings) {
 		await setStorage(`betterserv-credentials-${domain}`, {
+			username: "",
+			password: "",
+		});
+		return {};
+	}
+	return settings;
+}
+
+async function getUntisCredentials(domain) {
+	const settings = await getStorage(`betterserv-untis-${domain}`);
+	if (!settings) {
+		await setStorage(`betterserv-untis-${domain}`, {
+			school: "",
+			url: "",
 			username: "",
 			password: "",
 		});

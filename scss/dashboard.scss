@@ -1,0 +1,264 @@
+@import "colors";
+@import "roboto";
+@import "ubuntu";
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - 1em);
+    margin: 0.5em;
+    background-color: var(--betterserv-bg);
+    font-family: "Ubuntu", sans-serif;
+    color: var(--betterserv-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Roboto", sans-serif;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em;
+    background: var(--betterserv-topbar-gradient);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    color: var(--betterserv-topbar-text);
+
+    div {
+        display: flex;
+        align-items: center;
+    }
+
+    #settings_anchor {
+        width: 2em;
+        color: var(--betterserv-topbar-text);
+    }
+
+    select {
+        background: var(--betterserv-content-bg);
+        color: var(--betterserv-text);
+        border: none;
+        padding: 0.5em;
+        margin: 0 0.5em;
+    }
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: inline;
+            margin: 0 0.5em;
+            a {
+                color: var(--betterserv-text);
+            }
+        }
+    }
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    padding-top: 0.5em;
+    flex-grow: 1;
+
+    section {
+        width: calc((100% - 1em) / 2);
+        display: flex;
+        flex-direction: column;
+        background: var(--betterserv-content-bg);
+        padding: 0.5em;
+        overflow-x: hidden;
+        overflow-y: scroll;
+
+        h2 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+
+            a {
+                color: var(--betterserv-text);
+                text-decoration: underline;
+            }
+
+            .badge {
+                font-size: 0.75em;
+                background: var(--betterserv-link);
+                color: var(--betterserv-text);
+                padding: 0.1em 0.2em;
+                border-radius: 0.1em;
+            }
+
+            .info {
+                font-size: 0.75em;
+                color: var(--betterserv-text);
+                opacity: 0.5;
+                font-style: italic;
+            }
+        }
+
+        hr {
+            width: 100%;
+            color: var(--betterserv-accent);
+        }
+
+        &:first-of-type,
+        &:last-of-type {
+            width: calc((100% - 1em) / 4);
+        }
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+#timetable-date {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    span {
+        font-size: 1.5em;
+    }
+
+    button {
+        all: unset;
+        border: 1px solid var(--betterserv-accent);
+        border-radius: 0.25em;
+        padding: 0.5em;
+    }
+}
+
+#timetable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .lesson-group {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
+        width: 100%;
+    }
+
+    div:not(.lesson-group) {
+        border: 1px solid var(--betterserv-accent);
+        text-align: center;
+        margin: 0.5em 0;
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        min-height: 2.5em;
+
+        &.code-cancelled {
+            background: var(--betterserv-content-bg);
+            color: var(--betterserv-text);
+            border-color: var(--betterserv-warn);
+            border-style: dashed;
+            opacity: 0.5;
+
+            span:not(.time) {
+                text-decoration: line-through;
+            }
+        }
+
+        &.break {
+            justify-content: space-between;
+            width: 100%;
+            margin: 0.5em 0;
+            padding: 0.5em 0;
+            background: var(--betterserv-content-bg);
+            color: var(--betterserv-text);
+            border-color: var(--betterserv-link);
+            border-style: dashed;
+        }
+    }
+
+    img {
+        width: 90%;
+        height: auto;
+    }
+}
+
+ul#unseen_emails {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5em;
+        padding: 0.5em;
+        border-bottom: 1px solid var(--betterserv-accent);
+
+        .date {
+            font-size: 0.75em;
+            color: var(--betterserv-text);
+            text-align: right;
+        }
+
+        a {
+            color: var(--betterserv-link);
+        }
+    }
+
+    .ascii_art {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        white-space-collapse: preserve;
+    }
+}
+
+#starred_files {
+    list-style: none;
+    padding: 0;
+
+    li {
+        display: flex;
+        align-items: center;
+    }
+
+    a {
+        color: var(--betterserv-link);
+
+        &.active svg {
+            color: var(--betterserv-accent);
+        }
+
+        svg {
+            width: 1.5em;
+            height: 1.5em;
+            color: var(--betterserv-text);
+        }
+    }
+}

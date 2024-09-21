@@ -6,6 +6,8 @@ if [ ! -d ~/.nvm ]; then
   exit 1
 fi
 
+rm -rf dist
+
 source ~/.nvm/nvm.sh
 nvm use v21.7.1
 npm install

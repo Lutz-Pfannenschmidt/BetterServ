@@ -1,9 +1,10 @@
 # BetterServ Changelog
 
-## V 0.4.1, V 0.4.1
+## V 0.4.1 - V 0.4.3
 
 - fix some bugs
 - for some reason, the dashboard wont work for some people, so i added a button to the popup to open the dashboard as a fallback.
+- I literally hate JavaScript and Web Development in general.
 
 ## V 0.4.0
 

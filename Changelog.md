@@ -1,5 +1,10 @@
 # BetterServ Changelog
 
+## V 0.4.5
+
+- Added buttons to the timetable to switch between days.
+- If your last lesson of the day is over, the timetable will now show the next day by default.
+
 ## V 0.4.1 - V 0.4.4
 
 - fix some bugs

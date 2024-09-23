@@ -2,11 +2,18 @@ import { type Lesson, WebUntis } from "webuntis";
 import _ from 'lodash';
 import { getUntisCredentialsForDomain } from "./storage";
 
-export async function populateTimetable(iserv: string) {
+export async function populateTimetable(iserv: string, date: Date = new Date()) {
+    const timetableDateCurrent = document.getElementById('timetable-date-current') as HTMLSpanElement;
+    const timetableBtnPrevious = document.getElementById('timetable-prev') as HTMLSpanElement;
+    const timetableBtnNext = document.getElementById('timetable-next') as HTMLSpanElement;
+    timetableDateCurrent.textContent = getRelativeDate(date, new Date());
+    timetableBtnPrevious.onclick = () => populateTimetablePrevious(iserv, date);
+    timetableBtnNext.onclick = () => populateTimetableNext(iserv, date);
+
     const timetableDiv = document.getElementById('timetable') as HTMLDivElement;
     let timetable: Lesson[];
     try {
-        timetable = await getTimetable(iserv);
+        timetable = await getTimetable(iserv, date);
     } catch (e) {
         const msg = getUntisErrorMessage(e as Error);
         switch (msg) {
@@ -20,6 +27,16 @@ export async function populateTimetable(iserv: string) {
         return;
     }
     const additionalData = getAdditionalData(timetable);
+    const today = new Date();
+    if (
+        date.getDay() === today.getDay() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear() &&
+        date.getHours() > fixTimeFormat(additionalData.lastLessonEndTime).hours
+    ) {
+        populateTimetableNext(iserv, date);
+    }
+
     timetable = mergeAdjacentLessons(timetable);
     console.log(timetable);
     timetableDiv.innerHTML = '';
@@ -45,6 +62,16 @@ export async function populateTimetable(iserv: string) {
 
         makeBreakElement(additionalData.fixedLessonFormat[key][0], additionalData.fixedLessonFormat[inKeys[idx + 1]][0], timetableDiv, additionalData);
     }
+}
+
+async function populateTimetablePrevious(iserv: string, date: Date) {
+    const previousDay = new Date(date.getTime() - 1000 * 60 * 60 * 24);
+    await populateTimetable(iserv, previousDay);
+}
+
+async function populateTimetableNext(iserv: string, date: Date) {
+    const nextDay = new Date(date.getTime() + 1000 * 60 * 60 * 24);
+    await populateTimetable(iserv, nextDay);
 }
 
 function alertError(e: Error, iserv: string) {
@@ -167,7 +194,7 @@ function fixTimeFormatToString(time: number): string {
     return `${str.slice(0, -2)}:${str.slice(-2)}`;
 }
 
-async function getTimetable(iserv: string) {
+async function getTimetable(iserv: string, date: Date): Promise<Lesson[]> {
     const credentials = await getUntisCredentialsForDomain(iserv);
     if (!credentials || !credentials.school || !credentials.username || !credentials.password || !credentials.url) {
         throw new Error('Untis credentials are not set up yet');
@@ -177,17 +204,20 @@ async function getTimetable(iserv: string) {
 
     const untis = new WebUntis(credentials.school, credentials.username, credentials.password, credentials.url);
     await untis.login();
-    const timetable = await untis.getOwnTimetableForToday();
+    const timetable = await untis.getOwnTimetableFor(date);
     untis.logout();
     return timetable;
 }
 
 function getAdditionalData(lessons: Lesson[]): AdditionalData {
+    const sorted = lessons.sort((a, b) => a.startTime - b.startTime);
     const totalLessonDuration = lessons.reduce((acc, lesson) => acc + getTimeDifference(lesson.startTime, lesson.endTime), 0);
+    const lastLessonEndTime = sorted[sorted.length - 1].endTime;
     return {
         avgLessonDuration: totalLessonDuration / lessons.length,
         totalLessonDuration,
-        fixedLessonFormat: fixLessonFormatAndMerge(lessons)
+        fixedLessonFormat: fixLessonFormatAndMerge(lessons),
+        lastLessonEndTime: lastLessonEndTime
     };
 }
 
@@ -246,10 +276,22 @@ function mergeAdjacentLessons(lessons: Lesson[]): Lesson[] {
     return merged;
 }
 
+// Returns the relative date between two dates, e.g. "today", "tomorrow", "in n days"
+function getRelativeDate(dateA: Date, dateB: Date): string {
+    const diff = dateA.getTime() - dateB.getTime();
+    const days = Math.ceil(diff / (1000 * 60 * 60 * 24))
+    if (days === 0) return 'today';
+    if (days === 1) return 'tomorrow';
+    if (days === -1) return 'yesterday';
+    if (days < 0) return `${-days} days ago`;
+    return `in ${days} days`;
+}
+
 interface AdditionalData {
     avgLessonDuration: number; // should be 45 or 60, depending on the school. This is the average duration of a lesson in minutes
     totalLessonDuration: number;  // total duration of all lessons for the day in minutes
     fixedLessonFormat: FixedLessonFormat;
+    lastLessonEndTime: number;
 }
 
 interface FixedLessonFormat {

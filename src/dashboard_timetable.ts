@@ -2,7 +2,7 @@ import { type Lesson, WebUntis } from "webuntis";
 import _ from 'lodash';
 import { getUntisCredentialsForDomain } from "./storage";
 
-export async function populateTimetable(iserv: string, date: Date = new Date()) {
+export async function populateTimetable(iserv: string, date: Date = new Date(), force = false) {
     const timetableDateCurrent = document.getElementById('timetable-date-current') as HTMLSpanElement;
     const timetableBtnPrevious = document.getElementById('timetable-prev') as HTMLSpanElement;
     const timetableBtnNext = document.getElementById('timetable-next') as HTMLSpanElement;
@@ -29,6 +29,7 @@ export async function populateTimetable(iserv: string, date: Date = new Date()) 
     const additionalData = getAdditionalData(timetable);
     const today = new Date();
     if (
+        !force &&
         date.getDay() === today.getDay() &&
         date.getMonth() === today.getMonth() &&
         date.getFullYear() === today.getFullYear() &&
@@ -66,12 +67,12 @@ export async function populateTimetable(iserv: string, date: Date = new Date()) 
 
 async function populateTimetablePrevious(iserv: string, date: Date) {
     const previousDay = new Date(date.getTime() - 1000 * 60 * 60 * 24);
-    await populateTimetable(iserv, previousDay);
+    await populateTimetable(iserv, previousDay, true);
 }
 
 async function populateTimetableNext(iserv: string, date: Date) {
     const nextDay = new Date(date.getTime() + 1000 * 60 * 60 * 24);
-    await populateTimetable(iserv, nextDay);
+    await populateTimetable(iserv, nextDay, true);
 }
 
 function alertError(e: Error, iserv: string) {

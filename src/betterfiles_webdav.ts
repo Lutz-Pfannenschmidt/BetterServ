@@ -1,17 +1,19 @@
-import { AuthType, createClient, ResponseDataDetailed, type FileStat, type WebDAVClient } from "webdav";
+import { AuthType, createClient, type FileStat, type WebDAVClient } from "webdav";
 import { BetterServLogger } from "./betterServLogger";
-import { type BetterStarred, getCredentialsForDomain, getGeneralSettingsForDomain, getStarredFilesForDomain, setStarredFilesForDomain } from "./storage";
+import { type BetterStarred, getCredentialsForDomain, getStarredFilesForDomain, setStarredFilesForDomain } from "./storage";
 import { browser } from "browser-namespace";
 
 const logger = new BetterServLogger("WebDAV");
 let rtf: Intl.RelativeTimeFormat;
 let lang: string;
 let client: WebDAVClient;
+let cloud = true;
+let table: HTMLTableElement;
+let actions: HTMLDivElement;
 
 setup();
 
 async function setup() {
-    const generalSettings = await getGeneralSettingsForDomain(window.location.host);
     const credentials = await getCredentialsForDomain(window.location.host);
 
     const interval = setInterval(async () => { removePageLoader(interval) }, 10);
@@ -35,7 +37,7 @@ async function setup() {
     document.addEventListener("DOMContentLoaded", main);
 
     window.addEventListener("popstate", () => {
-        populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement);
+        populateContent(window.location.toString().split("/-/")[1]);
     });
 
     logger.log("Setup complete");
@@ -73,27 +75,41 @@ async function main() {
     const content = document.getElementById("content");
 
     if (!content) return;
+    cloud = detectCloud();
 
-    const draggingOverlay = document.createElement("div");
-    draggingOverlay.classList.add("dragging-overlay");
-    document.body.appendChild(draggingOverlay);
+    table = createTable();
+    actions = createActions();
 
-
-    const table = createTable();
-    const actions = createActions();
-    content.innerHTML = "";
-    content.appendChild(table);
-    content.appendChild(actions);
-
-    const path = window.location.toString().split("/-/")[1];
+    if (window.location.toString().endsWith("/iserv/file/cloud")) {
+        cloud = true;
+        makeTopbarFolders();
+        const old_crumbs = document.querySelector(".topbar-breadcrumbs");
+        if (old_crumbs) old_crumbs.innerHTML = "";
+        return;
+    }
 
     lang = document.querySelector("html")?.getAttribute("lang") || "en";
     rtf = new Intl.RelativeTimeFormat(lang, { numeric: "auto" });
 
-    populateContent(path, table);
+    const path = window.location.toString().split("/-/")[1];
+    const draggingOverlay = document.createElement("div");
+    draggingOverlay.classList.add("dragging-overlay");
+    document.body.appendChild(draggingOverlay);
+
+    populateContent(path);
 }
 
-async function populateContent(path: string, table: HTMLTableElement) {
+async function populateContent(path: string) {
+    const content = document.getElementById("content");
+    if (!content) return;
+
+    const betterserv_table = document.querySelector(".betterserv-table");
+    if (!betterserv_table) {
+        content.innerHTML = "";
+        content.appendChild(table);
+        content.appendChild(actions);
+    }
+
     const decodedPath = decodeURIComponent(path);
     const data = await client.getDirectoryContents(`/${decodedPath}`) as FileStat[];
     const tableBody = table.querySelector("tbody");
@@ -104,7 +120,7 @@ async function populateContent(path: string, table: HTMLTableElement) {
     const starred = await getStarredFilesForDomain(window.location.host);
 
     for (const file of data) {
-        const row = await makeFileRow(file, starred);
+        const row = makeFileRow(file, starred);
         if (!row) continue;
         tableBody.appendChild(row);
     }
@@ -121,28 +137,38 @@ function makeTopbarFolders() {
     topbar_btns.classList.add("betterserv-topbar-buttons");
 
     const files_link = document.createElement("a");
-    if (window.location.toString().split("/-/")[1].replaceAll("/", "") === "Files") files_link.classList.add("active");
-    files_link.href = `${window.location.toString().split("/-/")[0]}/-/Files`;
+    if (window.location.toString().endsWith("/iserv/file/-/Files")) files_link.classList.add("active");
+    files_link.href = "/iserv/file/-/Files";
     files_link.innerHTML = "Files";
     files_link.addEventListener("click", (e) => {
         e.preventDefault();
         window.history.pushState({}, "", files_link.href);
-        populateContent("/Files", document.querySelector(".betterserv-table") as HTMLTableElement);
+        populateContent("/Files");
     });
     topbar_btns.appendChild(files_link);
 
     const groups_link = document.createElement("a");
-    if (window.location.toString().split("/-/")[1].replaceAll("/", "") === "Groups") groups_link.classList.add("active");
-    groups_link.href = `${window.location.toString().split("/-/")[0]}/-/Groups`;
+    if (window.location.toString().endsWith("/iserv/file/-/Groups")) groups_link.classList.add("active");
+    groups_link.href = "/iserv/file/-/Groups";
     groups_link.innerHTML = "Groups";
     groups_link.addEventListener("click", (e) => {
         e.preventDefault();
         window.history.pushState({}, "", groups_link.href);
-        populateContent("/Groups", document.querySelector(".betterserv-table") as HTMLTableElement);
+        populateContent("/Groups");
     });
     topbar_btns.appendChild(groups_link);
 
+    if (!cloud) return;
 
+    const cloud_link = document.createElement("a");
+    if (window.location.toString().endsWith("/iserv/file/cloud")) cloud_link.classList.add("active");
+    cloud_link.href = "/iserv/file/cloud";
+    cloud_link.innerHTML = "Cloud";
+    topbar_btns.appendChild(cloud_link);
+
+
+    const collapsible = document.querySelector("div.content-header");
+    if (collapsible) collapsible.remove();
 }
 
 function makeBreadcrumbs() {
@@ -166,7 +192,7 @@ function makeBreadcrumbs() {
     home.addEventListener("click", (e) => {
         e.preventDefault();
         window.history.pushState({}, "", home.href);
-        populateContent("", document.querySelector(".betterserv-table") as HTMLTableElement);
+        populateContent("");
     });
 
     const path = decodeURI(window.location.toString()).split("/-/")[1].split("/");
@@ -183,7 +209,7 @@ function makeBreadcrumbs() {
         crumb.addEventListener("click", (e) => {
             e.preventDefault();
             window.history.pushState({}, "", href);
-            populateContent(`/${pathParts.slice(0, i + 1).join("/")}`, document.querySelector(".betterserv-table") as HTMLTableElement);
+            populateContent(`/${pathParts.slice(0, i + 1).join("/")}`,);
         });
     }
 
@@ -235,7 +261,7 @@ function createActions(): HTMLDivElement {
         const folderName = prompt("Enter the name of the new folder");
         if (!folderName) return;
         await client.createDirectory(`${window.location.toString().split("/-/")[1]}/${folderName.trim()}`);
-        populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement
+        populateContent(window.location.toString().split("/-/")[1]
         );
     });
 
@@ -252,7 +278,7 @@ function createActions(): HTMLDivElement {
                 const path = `${window.location.toString().split("/-/")[1]}/${file.name}`;
                 await client.putFileContents(path, await file.text());
             }
-            populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement);
+            populateContent(window.location.toString().split("/-/")[1]);
         }
         );
     }
@@ -267,7 +293,7 @@ function createActions(): HTMLDivElement {
         if (!confirmDelete) return;
 
         await Promise.all(files.map((file) => client.deleteFile(file)));
-        populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement);
+        populateContent(window.location.toString().split("/-/")[1]);
     });
 
     return actions;
@@ -301,7 +327,7 @@ function makeDotDotRow(): HTMLTableRowElement {
     row.querySelector("a")?.addEventListener("click", (e) => {
         e.preventDefault();
         window.history.pushState({}, "", href);
-        populateContent(`/${path}`, document.querySelector(".betterserv-table") as HTMLTableElement);
+        populateContent(`/${path}`);
     });
 
     return row;
@@ -352,7 +378,7 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
         row.querySelector("a")?.addEventListener("click", (e) => {
             e.preventDefault();
             window.history.pushState({}, "", href);
-            populateContent(file.filename, row.parentElement?.parentElement as HTMLTableElement);
+            populateContent(file.filename);
         });
 
     } else {
@@ -377,8 +403,7 @@ function makeFileRow(file: FileStat, starred: BetterStarred[]): HTMLTableRowElem
         const newName = prompt("Enter the new name of the file", file.basename);
         if (!newName) return;
         await client.moveFile(file.filename, `${window.location.toString().split("/-/")[1]}/${newName}`);
-        populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement
-        );
+        populateContent(window.location.toString().split("/-/")[1]);
     });
 
     const downloadLink = row.querySelector(".betterserv-download") as HTMLAnchorElement;
@@ -493,7 +518,7 @@ async function dropHandler(e: DragEvent) {
         if (!item) continue;
         await scanItem(item);
     }
-    populateContent(window.location.toString().split("/-/")[1], document.querySelector(".betterserv-table") as HTMLTableElement);
+    populateContent(window.location.toString().split("/-/")[1]);
 }
 
 async function scanItem(item: FileSystemEntry) {
@@ -519,4 +544,8 @@ async function handleFolder(item: FileSystemDirectoryEntry) {
             await scanItem(entry);
         }
     });
+}
+
+function detectCloud(): boolean {
+    return !!document.getElementById("cloud-tab-link");
 }

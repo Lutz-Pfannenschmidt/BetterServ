@@ -24,7 +24,7 @@
         },
         {
             "matches": [
-                "*://*/iserv/file/-*"
+                "*://*/iserv/file*"
             ],
             "js": [
                 "dist/betterfiles_webdav.js"

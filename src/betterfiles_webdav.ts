@@ -64,7 +64,7 @@ function notifyNoCredentials() {
     if (!settingsLink) return;
     settingsLink.addEventListener("click", (e) => {
         e.preventDefault();
-        window.location = `${browser.runtime.getURL("static/settings.html")}?iserv=${window.location.host}` as unknown as Location;
+        window.location = `${browser.runtime.getURL("static/settings.html")}?iserv=${window.location.host}#account` as unknown as Location;
     });
 }
 

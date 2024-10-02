@@ -1,5 +1,11 @@
 # BetterServ Changelog
 
+## V 0.4.6
+
+- add "Wolke" (cloud) support to BetterFiles
+- fix settings page (settings is nopw ts)
+- fix some browser storage issues
+
 ## V 0.4.5
 
 - Added buttons to the timetable to switch between days.

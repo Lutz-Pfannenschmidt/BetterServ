@@ -16,7 +16,7 @@ async function setup() {
 
     const interval = setInterval(async () => { removePageLoader(interval) }, 10);
 
-    if (!credentials) {
+    if (!credentials || !credentials.username || !credentials.password) {
         logger.error("No credentials found for this domain");
         notifyNoCredentials();
         return;

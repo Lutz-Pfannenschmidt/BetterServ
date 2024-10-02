@@ -1,4 +1,5 @@
 import { browser } from "browser-namespace";
+import _ from "lodash";
 
 export async function getFromBrowserStorage(key: string): Promise<unknown> {
     return await browser.storage.sync.get(key).then((res) => res[key]);
@@ -9,7 +10,17 @@ export async function setInBrowserStorage(key: string, value: unknown): Promise<
 }
 
 export async function getGeneralSettingsForDomain(domain: string): Promise<GeneralSettings> {
-    return await getFromBrowserStorage(`betterserv-general-${domain}`) as GeneralSettings;
+    const settings = await getFromBrowserStorage(`betterserv-general-${domain}`) as GeneralSettings;
+    if (_.isEmpty(settings)) {
+        setGeneralSettingsForDomain(domain, {
+            "hide-login": false,
+            "custom-files": false,
+            "tictactoe": false,
+            "tictactoe-difficulty": 1
+        });
+        return getGeneralSettingsForDomain(domain);
+    }
+    return settings;
 }
 
 export async function setGeneralSettingsForDomain(domain: string, settings: GeneralSettings): Promise<void> {
@@ -24,7 +35,15 @@ export interface GeneralSettings {
 }
 
 export async function getCredentialsForDomain(domain: string): Promise<Credentials> {
-    return await getFromBrowserStorage(`betterserv-credentials-${domain}`) as Credentials;
+    const creds = await getFromBrowserStorage(`betterserv-credentials-${domain}`) as Credentials;
+    if (_.isEmpty(creds)) {
+        setCredentialsForDomain(domain, {
+            "username": "",
+            "password": ""
+        });
+        return getCredentialsForDomain(domain);
+    }
+    return creds;
 }
 
 export async function setCredentialsForDomain(domain: string, settings: Credentials): Promise<void> {
@@ -38,10 +57,9 @@ export interface Credentials {
 
 export async function getStarredFilesForDomain(domain: string): Promise<BetterStarred[]> {
     const starred = await getFromBrowserStorage(`betterserv-starred-${domain}`) as BetterStarred[];
-    if (!Array.isArray(starred)) return [];
-    if (starred.length === 0) {
-        await setStarredFilesForDomain(domain, []);
-        return [];
+    if (_.isEmpty(starred)) {
+        setStarredFilesForDomain(domain, []);
+        return getStarredFilesForDomain(domain);
     }
     return starred;
 }
@@ -56,7 +74,17 @@ export interface BetterStarred {
 }
 
 export async function getUntisCredentialsForDomain(domain: string): Promise<UntisCredentials> {
-    return await getFromBrowserStorage(`betterserv-untis-${domain}`) as UntisCredentials;
+    const creds = await getFromBrowserStorage(`betterserv-untis-${domain}`) as UntisCredentials;
+    if (_.isEmpty(creds)) {
+        setUntisCredentialsForDomain(domain, {
+            "school": "",
+            "username": "",
+            "password": "",
+            "url": ""
+        });
+        return getUntisCredentialsForDomain(domain);
+    }
+    return creds;
 }
 
 export async function setUntisCredentialsForDomain(domain: string, settings: UntisCredentials): Promise<void> {

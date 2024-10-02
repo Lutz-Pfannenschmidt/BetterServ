@@ -9,6 +9,7 @@ module.exports = {
 		iservlist: "./src/iservlist.ts",
 		tictactoe: "./src/tictactoe.ts",
 		dashboard: "./src/dashboard.ts",
+		settings: "./src/settings.ts",
 		// betterpdf: "./src/betterpdf.ts",
 	},
 	devtool: false,

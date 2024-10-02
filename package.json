@@ -1,7 +1,7 @@
 {
     "type": "module",
     "scripts": {
-        "webext": "web-ext run --firefox /usr/bin/firefox -p ~/.mozilla/firefox/DEV/ --keep-profile-changes --verbose",
+        "webext": "web-ext run --firefox /usr/bin/firefox -p ~/.mozilla/firefox/betterserv/ --profile-create-if-missing --keep-profile-changes --verbose",
         "scss": "sass --watch scss:dist",
         "webpack": "npx webpack --config webpack.config.cjs --mode production",
         "webpack:watch": "npx webpack --config webpack.config.cjs --watch --mode development",

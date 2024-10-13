@@ -1,5 +1,5 @@
 import { AuthType, createClient, type FileStat, type WebDAVClient } from "webdav";
-import { BetterServLogger } from "./betterServLogger";
+import { BetterServLogger } from "./betterserv_logger";
 import { type BetterStarred, getCredentialsForDomain, getStarredFilesForDomain, setStarredFilesForDomain } from "./storage";
 import { browser } from "browser-namespace";
 

@@ -1,7 +1,5 @@
-import { BetterServLogger } from "./betterServLogger";
 import { getFromBrowserStorage, setInBrowserStorage } from "./storage";
 
-const logger = new BetterServLogger("IServList");
 main();
 
 async function main() {

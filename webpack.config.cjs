@@ -1,5 +1,4 @@
 const path = require("node:path");
-const { util } = require("webpack");
 
 module.exports = {
 	entry: {
@@ -7,10 +6,9 @@ module.exports = {
 		bettersidebar: "./src/bettersidebar.ts",
 		hidelogin: "./src/hidelogin.ts",
 		iservlist: "./src/iservlist.ts",
-		tictactoe: "./src/tictactoe.ts",
+		tictactoe: "./src/betterserv_tictactoe.ts",
 		dashboard: "./src/dashboard.ts",
 		settings: "./src/settings.ts",
-		// betterpdf: "./src/betterpdf.ts",
 	},
 	devtool: false,
 	output: {

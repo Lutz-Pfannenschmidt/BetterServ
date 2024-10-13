@@ -1,10 +1,13 @@
+import { BetterServLogger } from "./betterserv_logger";
 import { getGeneralSettingsForDomain } from "./storage";
 
+const logger = new BetterServLogger("HideLogin");
 main();
 
 async function main() {
     const settings = await getGeneralSettingsForDomain(window.location.host);
     if (!settings["hide-login"]) return;
+    logger.log("Hiding last login");
 
     const panels = document.querySelectorAll(".panel");
     for (const panel of panels) {

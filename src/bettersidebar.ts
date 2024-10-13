@@ -1,6 +1,5 @@
-import { browser } from "browser-namespace";
-import { BetterServLogger } from "./betterServLogger";
-import { getFromBrowserStorage, getStarredFilesForDomain, setStarredFilesForDomain } from "./storage";
+import { BetterServLogger } from "./betterserv_logger";
+import { getStarredFilesForDomain, setStarredFilesForDomain } from "./storage";
 
 const logger = new BetterServLogger("Sidebar");
 
@@ -31,7 +30,12 @@ async function buildSidebar(sidebar: HTMLDivElement) {
 
         </div>`;
 
-    sidebar.prepend(betterServPanel);
+    const ttt = document.querySelector(".ttt-panel");
+    if (ttt) {
+        ttt.after(betterServPanel);
+    } else {
+        sidebar.prepend(betterServPanel);
+    }
 
     const starred = document.getElementById("betterserv-starred");
     if (!starred) return

@@ -1,5 +1,9 @@
 # BetterServ Changelog
 
+## V 0.4.7
+
+- tictactoe fix
+
 ## V 0.4.6
 
 - add "Wolke" (cloud) support to BetterFiles

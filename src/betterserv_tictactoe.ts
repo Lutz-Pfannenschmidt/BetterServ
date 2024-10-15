@@ -137,6 +137,7 @@ export class TicTacToe {
 
     randomFirstMove() {
         this.makeMove(random(0, 8), "O");
+        this.canTurn = true;
     }
 
     async makeAIMove(): Promise<void> {

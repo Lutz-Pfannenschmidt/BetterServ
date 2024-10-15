@@ -9,8 +9,10 @@ async function main(): Promise<void> {
     const settings = await getGeneralSettingsForDomain(window.location.host);
     const sidebar = document.getElementById("idesk-sidebar");
 
-
     if (!settings.tictactoe || !sidebar) return;
+    const old_panels = document.querySelectorAll(".ttt-panel");
+    for (const panel of old_panels) panel.remove();
+
     new TicTacToe(sidebar);
 }
 

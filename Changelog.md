@@ -1,5 +1,9 @@
 # BetterServ Changelog
 
+## V 0.4.8
+
+- another tictactoe fix 😑
+
 ## V 0.4.7
 
 - tictactoe fix

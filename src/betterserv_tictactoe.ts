@@ -1,6 +1,8 @@
+import { random } from "lodash";
 import { BetterServLogger } from "./betterserv_logger";
 import { getGeneralSettingsForDomain } from "./storage";
 
+const logger = new BetterServLogger("TicTacToe");
 main();
 
 async function main(): Promise<void> {
@@ -8,6 +10,9 @@ async function main(): Promise<void> {
     const sidebar = document.getElementById("idesk-sidebar");
 
     if (!settings.tictactoe || !sidebar) return;
+    const old_panels = document.querySelectorAll(".ttt-panel");
+    for (const panel of old_panels) panel.remove();
+
     new TicTacToe(sidebar);
 }
 
@@ -17,7 +22,6 @@ export class TicTacToe {
     xStarted = false;
     canTurn = false;
     scores: { X: number, O: number }; // X is the player, O is the computer
-    logger = new BetterServLogger("TicTacToe");
 
     constructor(parent: HTMLElement) {
         this.parent = parent;
@@ -25,8 +29,8 @@ export class TicTacToe {
         this.scores = { X: 0, O: 0 };
 
         this.makeGrid()
-        this.logger.log("Initialised TicTacToe");
-        this.makeAIMove();
+        logger.log("Initialised TicTacToe");
+        this.randomFirstMove();
     }
 
     resetGame(): void {
@@ -34,8 +38,8 @@ export class TicTacToe {
         this.resetGrid();
         this.xStarted = Math.random() < 0.5;
         this.canTurn = this.xStarted;
-        this.logger.log(`Game reset, ${this.xStarted ? "X" : "O"} starts`);
-        if (!this.xStarted) this.makeAIMove();
+        logger.log(`Game reset, ${this.xStarted ? "X" : "O"} starts`);
+        if (!this.xStarted) this.randomFirstMove();
     }
 
     resetGrid(): void {
@@ -102,7 +106,7 @@ export class TicTacToe {
         const cell = this.parent.querySelector(`[data-index="${index}"]`) as HTMLElement;
         cell.classList.add(symbol.toLowerCase());
 
-        this.logger.log(`Made move ${symbol} at index ${index}`);
+        logger.log(`Made move ${symbol} at index ${index}`);
     }
 
     checkWinner(): string | null {
@@ -133,13 +137,18 @@ export class TicTacToe {
         this.resetGame();
     }
 
+    randomFirstMove() {
+        this.makeMove(random(0, 8), "O");
+        this.canTurn = true;
+    }
+
     async makeAIMove(): Promise<void> {
         const moves = await this.getAIMoves();
         if (!moves) return;
 
         const settings = await getGeneralSettingsForDomain(window.location.host);
         const diff = settings["tictactoe-difficulty"] || 5;
-        this.logger.log(`Difficulty: ${diff}, recommendet moves: ${moves}`);
+        logger.log(`Difficulty: ${diff}, recommendet moves: ${moves}`);
         const move = this.selectMove(moves, diff);
         this.makeMove(moves[move], "O");
         this.canTurn = true;
@@ -156,7 +165,7 @@ export class TicTacToe {
             const num = this.getEncodedBoard();
             const response = await fetch(`https://tictactoe.responseplan.de/${num}`);
             if (!response.ok) {
-                this.logger.error(`Failed to get AI moves, status: ${response.status}`);
+                logger.error(`Failed to get AI moves, status: ${response.status}`);
                 return null;
             }
             const data = await response.json();

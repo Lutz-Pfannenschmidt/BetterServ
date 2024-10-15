@@ -61,13 +61,10 @@ export async function getStarredFilesForDomain(domain: string): Promise<BetterSt
         setStarredFilesForDomain(domain, []);
         return [];
     }
-    console.log(starred);
     return starred;
 }
 
 export async function setStarredFilesForDomain(domain: string, starred: BetterStarred[]): Promise<void> {
-    console.log(starred);
-
     await setInBrowserStorage(`betterserv-starred-${domain}`, starred);
 }
 

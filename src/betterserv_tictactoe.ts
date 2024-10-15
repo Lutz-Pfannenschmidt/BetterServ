@@ -1,3 +1,4 @@
+import { random } from "lodash";
 import { BetterServLogger } from "./betterserv_logger";
 import { getGeneralSettingsForDomain } from "./storage";
 
@@ -26,7 +27,7 @@ export class TicTacToe {
 
         this.makeGrid()
         this.logger.log("Initialised TicTacToe");
-        this.makeAIMove();
+        this.randomFirstMove();
     }
 
     resetGame(): void {
@@ -35,7 +36,7 @@ export class TicTacToe {
         this.xStarted = Math.random() < 0.5;
         this.canTurn = this.xStarted;
         this.logger.log(`Game reset, ${this.xStarted ? "X" : "O"} starts`);
-        if (!this.xStarted) this.makeAIMove();
+        if (!this.xStarted) this.randomFirstMove();
     }
 
     resetGrid(): void {
@@ -131,6 +132,10 @@ export class TicTacToe {
         if (["X", "O"].includes(winner.toUpperCase())) this.scores[winner.toUpperCase() as "X" | "O"]++;
 
         this.resetGame();
+    }
+
+    randomFirstMove() {
+        this.makeMove(random(0, 8), "O");
     }
 
     async makeAIMove(): Promise<void> {
